@@ -12,6 +12,8 @@
   if(!frame || !selector || !scope)return;
   const defaultCircuit="https://www.falstad.com/circuit/circuitjs.html";
   let sim=null,eligible=[],record=[],lastSample=-Infinity,lastPaint=0;
+  let localAvailable=false;
+  let selectedExample=null;
   const windowSeconds=()=>Math.max(.001,Math.min(10,Number(windowInput.value)||.1));
   function message(text){status.textContent=text;}
   function clear(){
@@ -84,7 +86,32 @@
     sim.onanalyze=updateSelection;
     updateSelection();
     message("CircuitJS conectado. Los datos se obtienen del simulador, no del hardware.");
+    document.dispatchEvent(new CustomEvent("lab:circuit-ready",{detail:{example:selectedExample}}));
   }
+  const examples=new Set([
+    "ohms.txt","voltdivide.txt","capac.txt","fullrect.txt","3phasewye.txt","xor.txt"
+  ]);
+  // Navegar a una plantilla del catálogo incluido en CircuitJS reinicia
+  // la simulación y los datos medidos; no altera otros circuitos guardados.
+  function loadExample(filename){
+    if(!examples.has(filename))return {ok:false,message:"Plantilla no autorizada."};
+    if(!localAvailable)return {ok:false,message:"La copia integrada de CircuitJS aún no está disponible."};
+    clear();sim=null;eligible=[];selector.disabled=true;
+    selector.replaceChildren();
+    const option=document.createElement("option");
+    option.value="";option.textContent="Cargando práctica…";selector.append(option);
+    selectedExample=filename;
+    const address=new URL("./circuitjs/circuitjs.html",location.href);
+    address.searchParams.set("startCircuit",filename);
+    frame.src=address.href;
+    message("Cargando "+filename+" en CircuitJS…");
+    return {ok:true};
+  }
+  window.LabCircuit={
+    loadExample,
+    isIntegrated:()=>localAvailable,
+    currentExample:()=>selectedExample
+  };
   selector.addEventListener("change",clear);
   quantity.addEventListener("change",()=>scope.refresh());
   windowInput.addEventListener("change",clear);
@@ -100,7 +127,8 @@
     if(!res.ok)return false;
     const html=await res.text();
     return html.includes("circuitjs1.nocache.js");
-  }).then(localAvailable=>{
+  }).then(available=>{
+    localAvailable=available;
     if(!localAvailable){openRemote();return;}
     frame.addEventListener("load",()=>{
       try{
