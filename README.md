@@ -4,7 +4,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 **Web publicada desde el repositorio:** https://jgraciar.github.io/-laboratorio-electrotecnia/
 
-**Versión 0.2 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
+**Versión 0.3 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
 
 ## Funciones implementadas
 
@@ -15,6 +15,25 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 - Simulador matemático de red trifásica senoidal equilibrada en estrella, secuencia ABC/ACB, tensiones simples y compuestas y corrientes por fase.
 - Carga RLC serie, equilibrada y en régimen sinusoidal permanente; cálculo de impedancia, desfase, U, I, P, Q, S y factor de potencia.
 - Pestaña CircuitJS y un puente JavaScript para consultar la tensión y la corriente de un elemento de dos terminales **cuando CircuitJS está alojado en el mismo origen**.
+
+## Banco inicial de prácticas guiadas
+
+La pestaña **Prácticas guiadas** incluye seis propuestas basadas en archivos de circuito existentes y comprobados del catálogo oficial de CircuitJS:
+
+| Código | Módulo | Práctica | Circuito CircuitJS |
+|---|---|---|---|
+| E01 | Electrotecnia 0234 | Ley de Ohm, resistencias en paralelo | ohms.txt |
+| E02 | Electrotecnia 0234 | Divisor resistivo de tensión | voltdivide.txt |
+| E03 | Electrotecnia 0234 | Circuito RC serie en CA | capac.txt |
+| E04 | Electrotecnia 0234 | Sistema trifásico equilibrado en estrella | 3phasewye.txt |
+| N01 | Electrónica 0233 | Rectificador de onda completa | fullrect.txt |
+| N02 | Electrónica 0233 | Puerta XOR y tabla de verdad | xor.txt |
+
+Cada práctica incorpora: objetivos, enunciado, procedimientos, preguntas numéricas, autocorrección con margen de tolerancia, explicación matemática accesible bajo demanda y exportación de un informe TXT sin enviar datos del alumno a ningún servidor.
+
+La autocorrección se refiere a **los valores iniciales del circuito**. Si el alumno modifica componentes o generadores, debe restaurar el circuito original antes de usarla. Es una herramienta de autoevaluación, no una evaluación oficial del módulo. Los RA/CE se incorporarán una vez contrastados con la programación docente.
+
+El botón **Cargar montaje en CircuitJS** utiliza el parámetro documentado startCircuit y la copia de CircuitJS alojada en el mismo dominio; se reinicia la simulación y la adquisición virtual. No precisa hardware físico.
 
 ## Integración con CircuitJS
 
@@ -56,4 +75,4 @@ Puedes servir la raíz del repositorio con un servidor HTTP estático (por ejemp
 
 ## Próximos hitos
 
-Comprobar la integración web real de CircuitJS; mejorar la sincronización y las mediciones de potencia y espectro de señales simuladas; ampliar la biblioteca de prácticas de Electrotecnia 0234 y Electrónica 0233; incorporar sistemas trifásicos desequilibrados y fallos de neutro.
+Validar en un navegador la carga de los seis circuitos y su adquisición al cambiar de práctica; ampliar el banco con más casos de Electrotecnia y Electrónica y cruzarlos con RA/CE oficiales; mejorar la adquisición y las mediciones de potencia; incorporar sistemas trifásicos desequilibrados y fallos de neutro.
