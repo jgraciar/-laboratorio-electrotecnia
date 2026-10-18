@@ -4,7 +4,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 **Web publicada desde el repositorio:** https://jgraciar.github.io/-laboratorio-electrotecnia/
 
-**Versión 0.4 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
+**Versión 0.5 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
 
 ## Funciones implementadas
 
@@ -50,13 +50,19 @@ Se incluyen seis prácticas nuevas de SCE; los RA y los CE asociados provienen d
 | SCE01 | Carga RL en CA, impedancia y factor de potencia | inductac.txt | RA1: CE 1a, 1b, 1c |
 | SCE02 | Resonancia RLC serie | lrc.txt | RA1: CE 1b, 1c |
 | SCE03 | Estrella trifásica, potencia y neutro | 3phasewye.txt | RA1: CE 1c, 1d |
-| SCE04 | Transformador monofásico como base para estudiar transformadores trifásicos | transformer.txt | RA3: CE 3a, 3h (introducción parcial) |
+| SCE04 | Transformador monofásico como base para estudiar transformadores trifásicos | transformer.txt | RA3: CE 3a (introducción parcial) |
 | SCE05 | Amplificador no inversor | amp-noninvert.txt | RA5: CE 5d, 5e, 5h |
 | SCE06 | Circuito combinacional XOR | xor.txt | RA6: CE 6a, 6b, 6c, 6g, 6h |
 
 Todas estas actividades incluyen objetivos, procedimiento, teoría de apoyo, preguntas numéricas con autocorrección y generación de un informe TXT. La autocorrección de respuestas numéricas emplea el **montaje original**, y su resultado no supone por sí solo la evaluación completa de un criterio de evaluación.
 
 **Limitación didáctica específica:** la práctica SCE04 utiliza un transformador monofásico para introducir el comportamiento de los transformadores. No equivale a un ensayo trifásico, no comprueba el grupo vectorial y por tanto no acredita íntegramente el RA3. En SCE02 se diferencia el régimen transitorio del cálculo fasorial de resonancia. La simulación no acredita, por sí misma, las operaciones de medida sobre equipos reales que requieren normativa de seguridad.
+
+## Consulta visible de resultados de aprendizaje (RA) y criterios de evaluación (CE)
+
+**Versión 0.5:** abre **Prácticas guiadas**, selecciona un módulo y después una práctica. Justo debajo del enunciado aparece el apartado **«Resultados de aprendizaje y criterios de evaluación vinculados»**, con el número y la redacción del RA, una lista de CE identificados individualmente (por ejemplo, **CE 1b**, **CE 1c**), una descripción legible de cada criterio y el enlace directo al real decreto en el BOE. Las fichas de los **tres módulos** incluyen esa información.
+
+La correspondencia es **parcial**: no se presupone que una simulación certifique la totalidad de un CE ni los ensayos/medidas reales requeridos en el taller. El informe TXT incorpora también el RA, los CE y su normativa de referencia. Las descripciones de los CE están adaptadas para lectura didáctica; el texto jurídico íntegro se consulta en el BOE.
 
 ## Integración con CircuitJS
 
