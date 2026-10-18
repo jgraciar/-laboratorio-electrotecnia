@@ -14,6 +14,7 @@
   let sim=null,eligible=[],record=[],lastSample=-Infinity,lastPaint=0;
   let localAvailable=false;
   let selectedExample=null;
+  let pendingModel=null;
   const windowSeconds=()=>Math.max(.001,Math.min(10,Number(windowInput.value)||.1));
   function message(text){status.textContent=text;}
   function clear(){
@@ -86,7 +87,12 @@
     sim.onanalyze=updateSelection;
     updateSelection();
     message("CircuitJS conectado. Los datos se obtienen del simulador, no del hardware.");
-    document.dispatchEvent(new CustomEvent("lab:circuit-ready",{detail:{example:selectedExample}}));
+    if(pendingModel){
+      const model=pendingModel;pendingModel=null;
+      importModel(model.filename,model.dump);
+    }else{
+      document.dispatchEvent(new CustomEvent("lab:circuit-ready",{detail:{example:selectedExample}}));
+    }
   }
   const examples=new Set([
     "ohms.txt","voltdivide.txt","capac.txt","fullrect.txt","3phasewye.txt","xor.txt",
@@ -94,10 +100,32 @@
   ]);
   // Navegar a una plantilla del catálogo incluido en CircuitJS reinicia
   // la simulación y los datos medidos; no altera otros circuitos guardados.
+  function importModel(filename,dump){
+    if(!sim){
+      pendingModel={filename,dump};
+      message("CircuitJS está inicializando; el modelo se cargará automáticamente.");
+      return {ok:true};
+    }
+    try{
+      clear();
+      selectedExample=filename;
+      sim.importCircuit(dump,false);
+      updateSelection();
+      message("Modelo equivalente cargado: "+filename+". Puedes editar sus elementos y medir las señales simuladas.");
+      document.dispatchEvent(new CustomEvent("lab:circuit-ready",{detail:{example:filename}}));
+      return {ok:true};
+    }catch(error){
+      message("No se pudo cargar el modelo: "+error.message);
+      return {ok:false,message:"Error en importación CircuitJS: "+error.message};
+    }
+  }
   function loadExample(filename){
+    if(!localAvailable)return {ok:false,message:"CircuitJS integrado aún no está disponible."};
+    const dump=window.LabCircuitModels?.[filename];
+    if(typeof dump==="string" && dump.startsWith("$ "))return importModel(filename,dump);
     if(!examples.has(filename))return {ok:false,message:"Plantilla no autorizada."};
     if(!localAvailable)return {ok:false,message:"La copia integrada de CircuitJS aún no está disponible."};
-    clear();sim=null;eligible=[];selector.disabled=true;
+    clear();sim=null;pendingModel=null;eligible=[];selector.disabled=true;
     selector.replaceChildren();
     const option=document.createElement("option");
     option.value="";option.textContent="Cargando práctica…";selector.append(option);
