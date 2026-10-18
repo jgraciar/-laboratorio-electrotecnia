@@ -4,7 +4,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 **Web publicada desde el repositorio:** https://jgraciar.github.io/-laboratorio-electrotecnia/
 
-**Versión 0.3 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
+**Versión 0.4 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
 
 ## Funciones implementadas
 
@@ -34,6 +34,29 @@ Cada práctica incorpora: objetivos, enunciado, procedimientos, preguntas numér
 La autocorrección se refiere a **los valores iniciales del circuito**. Si el alumno modifica componentes o generadores, debe restaurar el circuito original antes de usarla. Es una herramienta de autoevaluación, no una evaluación oficial del módulo. Los RA/CE se incorporarán una vez contrastados con la programación docente.
 
 El botón **Cargar montaje en CircuitJS** utiliza el parámetro documentado startCircuit y la copia de CircuitJS alojada en el mismo dominio; se reinicia la simulación y la adquisición virtual. No precisa hardware físico.
+
+## Módulo de Grado Superior: Sistemas y Circuitos Eléctricos (0520)
+
+La versión 0.4 incorpora un selector de módulo en **Prácticas guiadas** que separa:
+
+- **Electrotecnia 0234**, Grado Medio.
+- **Electrónica 0233**, Grado Medio.
+- **Sistemas y Circuitos Eléctricos 0520**, Grado Superior de Sistemas Electrotécnicos y Automatizados (SEA).
+
+Se incluyen seis prácticas nuevas de SCE; los RA y los CE asociados provienen del Real Decreto 1127/2010, anexo I, módulo 0520: https://www.boe.es/buscar/doc.php?id=BOE-A-2010-15355.
+
+| Código | Práctica SCE | Circuito oficial CircuitJS | Vinculación orientativa |
+|---|---|---|---|
+| SCE01 | Carga RL en CA, impedancia y factor de potencia | inductac.txt | RA1: CE 1a, 1b, 1c |
+| SCE02 | Resonancia RLC serie | lrc.txt | RA1: CE 1b, 1c |
+| SCE03 | Estrella trifásica, potencia y neutro | 3phasewye.txt | RA1: CE 1c, 1d |
+| SCE04 | Transformador monofásico como base para estudiar transformadores trifásicos | transformer.txt | RA3: CE 3a, 3h (introducción parcial) |
+| SCE05 | Amplificador no inversor | amp-noninvert.txt | RA5: CE 5d, 5e, 5h |
+| SCE06 | Circuito combinacional XOR | xor.txt | RA6: CE 6a, 6b, 6c, 6g, 6h |
+
+Todas estas actividades incluyen objetivos, procedimiento, teoría de apoyo, preguntas numéricas con autocorrección y generación de un informe TXT. La autocorrección de respuestas numéricas emplea el **montaje original**, y su resultado no supone por sí solo la evaluación completa de un criterio de evaluación.
+
+**Limitación didáctica específica:** la práctica SCE04 utiliza un transformador monofásico para introducir el comportamiento de los transformadores. No equivale a un ensayo trifásico, no comprueba el grupo vectorial y por tanto no acredita íntegramente el RA3. En SCE02 se diferencia el régimen transitorio del cálculo fasorial de resonancia. La simulación no acredita, por sí misma, las operaciones de medida sobre equipos reales que requieren normativa de seguridad.
 
 ## Integración con CircuitJS
 
@@ -75,4 +98,4 @@ Puedes servir la raíz del repositorio con un servidor HTTP estático (por ejemp
 
 ## Próximos hitos
 
-Validar en un navegador la carga de los seis circuitos y su adquisición al cambiar de práctica; ampliar el banco con más casos de Electrotecnia y Electrónica y cruzarlos con RA/CE oficiales; mejorar la adquisición y las mediciones de potencia; incorporar sistemas trifásicos desequilibrados y fallos de neutro.
+Validar en navegador los seis nuevos montajes SCE y sus cálculos guiados; completar prácticas sobre máquinas rotativas, transformadores trifásicos y medida real de parámetros; vincular evidencias de evaluación con los RA/CE y la programación docente; incorporar sistemas trifásicos desequilibrados y fallos de neutro.
