@@ -1,112 +1,125 @@
 "use strict";
-// Referencias curriculares sintetizadas para navegación didáctica.
-// Las descripciones NO son transcripciones literales: consultar la norma enlazada.
-// La realización de una práctica NO acredita por sí sola un RA o CE completo.
+// Relación DIDÁCTICA y PARCIAL entre prácticas y RA/CE de las enseñanzas mínimas.
+// Redacción del resultado de aprendizaje: currículo estatal; las descripciones de CE
+// se han resumido fielmente. Consultar el BOE para el texto íntegro.
+// Una simulación no acredita medidas reales ni la totalidad de un RA.
 window.LabCurriculum = {
   E01: {
-    ra:"RA1",title:"Cálculos y fundamentos de circuitos eléctricos de corriente continua",
+    ra:"RA1",
+    title:"Realiza cálculos en circuitos eléctricos de corriente continua, aplicando principios y conceptos básicos de electricidad.",
     criteria:[
-      ["b","Magnitudes eléctricas y sus unidades"],
-      ["c","Problemas basados en la ley de Ohm"],
-      ["g","Simplificación de asociaciones de resistencias"],
-      ["h","Resolución de circuitos de CC en serie y paralelo"]
+      ["b","Identifica magnitudes eléctricas y utiliza sus unidades correctamente."],
+      ["c","Resuelve ejercicios aplicando la ley de Ohm (el CE también incluye variación de resistencia con la temperatura)."],
+      ["g","Simplifica asociaciones de resistencias en serie y paralelo."],
+      ["h","Calcula circuitos de corriente continua con asociaciones de resistencias."]
     ]
   },
   E02: {
-    ra:"RA1",title:"Cálculos y fundamentos de circuitos eléctricos de corriente continua",
+    ra:"RA1",
+    title:"Realiza cálculos en circuitos eléctricos de corriente continua, aplicando principios y conceptos básicos de electricidad.",
     criteria:[
-      ["d","Cálculos de potencia y energía eléctrica"],
-      ["g","Agrupaciones de resistencias en serie"],
-      ["h","Cálculos de tensiones e intensidades en circuitos de CC"]
+      ["d","Calcula potencia eléctrica (el CE también trata energía y rendimiento)."],
+      ["g","Simplifica conexiones serie-paralelo de resistencias."],
+      ["h","Determina tensiones e intensidades en circuitos de corriente continua."]
     ]
   },
   E03: {
-    ra:"RA3",title:"Cálculo y análisis de circuitos monofásicos de corriente alterna",
+    ra:"RA3",
+    title:"Realiza cálculos en circuitos eléctricos de corriente alterna (CA) monofásica, aplicando las técnicas más adecuadas.",
     criteria:[
-      ["a","Características de una señal senoidal"],
-      ["b","Valores característicos de la corriente alterna"],
-      ["c","Relaciones entre tensión, corriente y potencia en receptores de CA"],
-      ["d","Cálculos en circuitos de CA con R, L y C en serie"]
+      ["a","Identifica las características de señales senoidales."],
+      ["b","Reconoce valores característicos de corriente alterna."],
+      ["c","Relaciona tensión, corriente y potencia en cargas resistivas, inductivas y capacitivas."],
+      ["d","Resuelve cálculos de magnitudes en circuitos de CA con R, L y C en serie."]
     ]
   },
   E04: {
-    ra:"RA4",title:"Magnitudes de sistemas trifásicos y conexiones de receptores",
+    ra:"RA4",
+    title:"Realiza cálculos de las magnitudes eléctricas básicas de un sistema trifásico, reconociendo el tipo de sistema y la naturaleza y tipo de conexión de los receptores.",
     criteria:[
-      ["b","Distribución trifásica a tres y cuatro hilos"],
-      ["c","Conexiones estrella y triángulo"],
-      ["d","Diferencia entre cargas equilibradas y desequilibradas"],
-      ["e","Cálculos de tensión, intensidad y potencia en cargas equilibradas"]
+      ["b","Describe sistemas de generación y distribución trifásicos de tres y cuatro conductores."],
+      ["c","Identifica conexiones de cargas trifásicas en estrella y triángulo."],
+      ["d","Diferencia cargas equilibradas y desequilibradas."],
+      ["e","Calcula intensidades, tensiones y potencias en receptores trifásicos equilibrados."]
     ]
   },
   N01: {
-    ra:"RA3",title:"Análisis de circuitos electrónicos de rectificación y filtrado",
+    ra:"RA3",
+    title:"Reconoce circuitos de rectificación y filtrado determinando sus características y aplicaciones.",
     criteria:[
-      ["a","Identificación de los componentes de rectificación"],
-      ["d","Identificación de componentes y símbolos en esquemas"],
-      ["e","Reconocimiento de rectificadores y filtros"],
-      ["f","Simulación de circuitos de rectificación"]
+      ["a","Reconoce los componentes del circuito rectificador."],
+      ["d","Relaciona los símbolos de los esquemas con sus componentes."],
+      ["e","Describe distintas configuraciones de rectificadores y filtros."],
+      ["f","Monta o simula el circuito rectificador."]
     ]
   },
   N02: {
-    ra:"RA1",title:"Reconocimiento de circuitos lógicos combinacionales",
+    ra:"RA1",
+    title:"Reconoce circuitos lógicos combinacionales determinando sus características y aplicaciones.",
     criteria:[
-      ["b","Funciones lógicas fundamentales"],
-      ["c","Representación simbólica de circuitos lógicos"],
-      ["d","Interpretación de funciones combinacionales"],
-      ["f","Montaje o simulación de circuitos lógicos"],
-      ["g","Comprobación del funcionamiento del circuito"]
+      ["b","Describe funciones lógicas fundamentales."],
+      ["c","Representa circuitos mediante simbología lógica adecuada."],
+      ["d","Interpreta funciones combinacionales básicas."],
+      ["f","Monta o simula circuitos lógicos."],
+      ["g","Verifica el funcionamiento de los circuitos lógicos."]
     ]
   },
   SCE01: {
-    ra:"RA1",title:"Parámetros y cálculos en sistemas de corriente alterna",
+    ra:"RA1",
+    title:"Determina los parámetros de sistemas eléctricos, realizando cálculos o medidas en circuitos de corriente alterna (c.a.).",
     criteria:[
-      ["a","Características de señales alternas senoidales"],
-      ["b","Comportamiento de receptores en corriente alterna"],
-      ["c","Cálculos de U, I, impedancia, potencia y cos φ en RLC"]
+      ["a","Reconoce las características de la señal alterna senoidal."],
+      ["b","Reconoce el comportamiento de receptores ante corriente alterna."],
+      ["c","Calcula tensión, intensidad, potencias, coseno de fi y otros parámetros en circuitos RLC."]
     ]
   },
   SCE02: {
-    ra:"RA1",title:"Parámetros y cálculos en sistemas de corriente alterna",
+    ra:"RA1",
+    title:"Determina los parámetros de sistemas eléctricos, realizando cálculos o medidas en circuitos de corriente alterna (c.a.).",
     criteria:[
-      ["b","Respuesta de los receptores frente a la corriente alterna"],
-      ["c","Cálculos de impedancia y frecuencia de resonancia en RLC"]
+      ["b","Identifica el comportamiento de cargas R, L y C ante la corriente alterna."],
+      ["c","Calcula magnitudes eléctricas y frecuencia de resonancia en un circuito RLC."]
     ]
   },
   SCE03: {
-    ra:"RA1",title:"Parámetros y cálculos en sistemas de corriente alterna",
+    ra:"RA1",
+    title:"Determina los parámetros de sistemas eléctricos, realizando cálculos o medidas en circuitos de corriente alterna (c.a.).",
     criteria:[
-      ["c","Cálculos de intensidad, tensión y potencia en cargas de CA"],
-      ["d","Distribución trifásica a tres y cuatro hilos"]
+      ["c","Calcula las potencias, tensiones y corrientes de una carga trifásica de CA."],
+      ["d","Distingue los sistemas de distribución trifásicos a tres y cuatro hilos."]
     ]
   },
   SCE04: {
-    ra:"RA3",title:"Caracterización y ensayos de transformadores trifásicos",
+    ra:"RA3",
+    title:"Caracteriza transformadores trifásicos, analizando su funcionamiento y realizando pruebas y ensayos.",
     criteria:[
-      ["a","Características físicas y funcionales de transformadores: introducción parcial con modelo monofásico"]
+      ["a","Distingue características físicas y funcionales de los transformadores, mediante una introducción monofásica."]
     ],
-    caution:"Actividad introductoria. No representa un transformador trifásico ni incluye ensayos de vacío/cortocircuito; no acredita por sí misma el RA3."
+    caution:"Solo actividad introductoria monofásica. No reproduce un transformador trifásico ni sus ensayos; no acredita el RA3 completo. No se incluye el CE 3h porque aquí no se calcula regulación, rendimiento o caída de tensión."
   },
   SCE05: {
-    ra:"RA5",title:"Funcionamiento y aplicaciones de circuitos analógicos",
+    ra:"RA5",
+    title:"Caracteriza circuitos electrónicos analógicos, analizando su funcionamiento e identificando sus aplicaciones.",
     criteria:[
-      ["d","Caracterización de amplificadores"],
-      ["e","Dependencia de la ganancia en amplificadores operacionales"],
-      ["h","Visualización de señales de entrada y salida"]
+      ["d","Caracteriza circuitos amplificadores."],
+      ["e","Comprueba de qué factores depende la ganancia de un amplificador operacional."],
+      ["h","Visualiza y compara señales de entrada y salida de circuitos analógicos."]
     ]
   },
   SCE06: {
-    ra:"RA6",title:"Funcionamiento y aplicaciones de circuitos digitales",
+    ra:"RA6",
+    title:"Caracteriza circuitos electrónicos digitales, analizando su funcionamiento e identificando sus aplicaciones.",
     criteria:[
-      ["a","Reconocimiento de funciones lógicas básicas"],
-      ["b","Representación de circuitos lógicos"],
-      ["c","Interpretación de funciones combinacionales"],
-      ["g","Comprobación del funcionamiento de circuitos lógicos"],
-      ["h","Simulación informática de circuitos digitales"]
+      ["a","Reconoce las funciones lógicas fundamentales."],
+      ["b","Representa esquemas de circuitos lógicos."],
+      ["c","Interpreta funciones combinacionales."],
+      ["g","Comprueba el funcionamiento de circuitos lógicos."],
+      ["h","Utiliza programas informáticos para simular circuitos electrónicos."]
     ]
   }
 };
 window.LabCurriculumSources = {
-  "Electrotecnia 0234":"https://www.boe.es/buscar/doc.php?id=BOE-A-2008-3957",
-  "Electrónica 0233":"https://www.boe.es/buscar/doc.php?id=BOE-A-2008-3957",
+  "Electrotecnia 0234":"https://www.boe.es/diario_boe/txt.php?id=BOE-A-2008-3957",
+  "Electrónica 0233":"https://www.boe.es/diario_boe/txt.php?id=BOE-A-2008-3957",
   "Sistemas y Circuitos Eléctricos 0520":"https://www.boe.es/buscar/doc.php?id=BOE-A-2010-15355"
 };
