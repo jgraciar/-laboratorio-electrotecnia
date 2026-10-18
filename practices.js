@@ -294,6 +294,19 @@
       "Cargando "+p.code+": "+p.title+". Espera al mensaje «CircuitJS conectado» y selecciona el componente que quieras medir.":
       result.message;
   });
+  window.LabPractices={
+    open(code){
+      const p=PRACTICES.find(item=>item.code===code);
+      if(!p)return false;
+      if(moduleSelect)moduleSelect.value=p.module;
+      refreshPracticeOptions();
+      select.value=p.code;
+      render();
+      window.LabScope?.setMode("practices");
+      return true;
+    },
+    getAvailableCodes(){return PRACTICES.map(p=>p.code)}
+  };
   document.addEventListener("lab:circuit-ready",event=>{
     const loaded=event.detail?.example;
     if(loaded && practice().file===loaded){
