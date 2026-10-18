@@ -7,6 +7,7 @@
   <title>Laboratorio virtual de Electrotecnia</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
+  <script src="bridge.js" defer></script>
 </head>
 <body>
 <header class="header">
@@ -16,7 +17,7 @@
       <h1>Laboratorio virtual</h1>
       <p class="subtitle">Osciloscopio, generador de funciones y redes trifásicas. Todo desde tu navegador.</p>
     </div>
-    <div class="pill">Versión 0.1 · Simulación</div>
+    <div class="pill">Versión 0.2 · Simulación y análisis</div>
   </div>
 </header>
 <main class="layout">
@@ -53,10 +54,16 @@
     <p class="hint">Modelo teórico senoidal en régimen permanente. No incluye todavía desequilibrios, apertura de neutro ni transitorios.</p>
   </section>
   <section class="panel" id="falstad-controls" hidden>
-    <div class="section-heading"><div><h2>Falstad CircuitJS</h2><p>Simulador de circuitos desarrollado por Paul Falstad y colaboradores</p></div></div>
-    <p class="hint">En esta primera versión se muestra CircuitJS desde su sitio oficial. Todavía no existe transferencia automática de muestras entre CircuitJS y nuestro osciloscopio virtual.</p>
-    <div class="actions"><a href="https://www.falstad.com/circuit/" target="_blank" rel="noopener noreferrer" class="button-link">Abrir CircuitJS en otra pestaña ↗</a></div>
-    <iframe title="Simulador CircuitJS de Falstad" id="circuit-frame" data-src="https://www.falstad.com/circuit/circuitjs.html" loading="lazy"></iframe>
+    <div class="section-heading"><div><h2>CircuitJS y osciloscopio</h2><p>Montaje de circuitos y adquisición virtual de tensiones y corrientes por componente.</p></div></div>
+    <p class="hint" id="bridge-status" role="status">Comprobando si CircuitJS está alojado en esta misma web…</p>
+    <div class="controls bridge-controls">
+      <label>Componente del circuito<select id="elementSelect" disabled><option value="">Esperando conexión…</option></select></label>
+      <label>Magnitud visualizada<select id="elementQuantity"><option value="voltage">Tensión en el componente (V)</option><option value="current">Corriente en el componente (A)</option></select></label>
+      <label>Ventana de adquisición · ms<input id="sampleWindow" type="number" min="1" max="10000" step="10" value="100"></label>
+    </div>
+    <div class="actions"><a href="https://www.falstad.com/circuit/" target="_blank" rel="noopener noreferrer" class="button-link">Abrir Falstad oficial ↗</a></div>
+    <iframe title="Simulador CircuitJS de Falstad" id="circuit-frame" loading="lazy"></iframe>
+    <p class="hint">Las señales mostradas proceden del motor CircuitJS cuando está alojado en este mismo dominio. En modo externo solo se puede editar el circuito: el navegador impide leer sus señales por motivos de seguridad.</p>
   </section>
   <section class="panel" id="scope-panel">
     <div class="section-heading horizontal">
@@ -65,7 +72,18 @@
         <select id="traceMode"><option value="phase">Tensiones de fase</option><option value="line">Tensiones compuestas</option><option value="current">Corrientes de fase</option></select>
       </label>
     </div>
+    <div class="scope-toolbar">
+      <button id="cursorsToggle" type="button" class="toolbtn" aria-pressed="false">Cursores: desactivados</button>
+      <button id="spectrumToggle" type="button" class="toolbtn" aria-pressed="false">Espectro y THD</button>
+      <button id="exportCsv" type="button" class="toolbtn">Exportar CSV</button>
+      <span id="cursorReadout" class="cursor-readout" aria-live="polite"></span>
+    </div>
     <div class="scope"><canvas id="scope" aria-label="Señales simuladas en función del tiempo" role="img"></canvas></div>
+    <div id="spectrum-panel" class="spectrum-panel" hidden>
+      <h3>Análisis armónico de la primera señal</h3>
+      <div class="spectrum-canvas"><canvas id="spectrum" aria-label="Espectro armónico simulado" role="img"></canvas></div>
+      <p id="spectrumInfo" class="hint">Se muestran los primeros 15 armónicos y la distorsión calculada a partir de las muestras.</p>
+    </div>
     <div id="legend" class="legend"></div>
     <div class="metrics" id="metrics" aria-live="polite"></div>
     <p class="disclaimer">Atención: los resultados son simulaciones matemáticas. No conectes redes de 230/400 V al Hantek 6022BE.</p>
