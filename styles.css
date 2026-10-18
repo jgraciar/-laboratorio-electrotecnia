@@ -105,3 +105,28 @@ footer a{color:#92ccff}
 .practice-curriculum-warning{margin:14px 0 8px;padding:11px;background:#49351f;color:#ffe4b6;border-left:3px solid #ffd081;border-radius:5px;font-size:12px}
 .practice-source{font-size:13px;color:#9ad3ff;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:430px){.practice-curriculum-detail{padding:11px}.practice-ce-item{flex-direction:column;gap:3px}}
+
+
+/* Biblioteca bibliográfica y navegación por unidades · v0.8 */
+.publication-filters{display:grid;grid-template-columns:minmax(220px,1fr) minmax(220px,1fr);gap:15px;margin-bottom:18px}
+.publication-header{padding:16px 18px;border-radius:9px;background:#203b58;border:1px solid #3e638a}
+.publication-header h3{font-size:20px;margin:0 0 8px}
+.publication-field{margin:5px 0;font-size:13px;color:#e0ebfa}
+.publication-field strong{color:#a9d5ff}
+.publication-note{margin:15px 0;padding:12px;border:1px solid #405d7c;background:#1b334b;border-radius:8px;font-size:13px;color:#c8ddf1}
+.publication-unit-content{padding:16px 3px}
+.publication-unit-content h4{font-size:18px;margin:0 0 11px}
+.publication-unit-content h5{font-size:14px;color:#b9dbff;margin:19px 0 9px}
+.publication-activity-list{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.publication-activity{display:flex;gap:10px;justify-content:space-between;align-items:center;border:1px solid #385473;background:#1c304a;padding:11px 13px;border-radius:8px}
+.publication-activity strong{font-size:13px}
+.publication-activity span{white-space:nowrap;color:#a9c5e4;font-size:12px}
+.publication-muted{font-size:13px;color:#aac4e0}
+.publication-numbered{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.publication-numbered-item{background:#1c344e;border:1px solid #436284;padding:12px;border-radius:9px;display:flex;align-items:flex-start;flex-direction:column;gap:8px}
+.publication-numbered-item strong{font-size:13px}
+.publication-numbered-item p{margin:0;font-size:13px;color:#e8f1fc}
+.publication-numbered-item small{color:#aac4dc;font-size:11px}
+.publication-numbered-item .toolbtn{margin-top:auto}
+.publication-linked{display:flex;gap:9px;flex-wrap:wrap}
+@media(max-width:750px){.publication-filters{grid-template-columns:1fr}.publication-numbered{grid-template-columns:1fr}.publication-activity{align-items:flex-start;flex-direction:column}.publication-activity span{white-space:normal}}
