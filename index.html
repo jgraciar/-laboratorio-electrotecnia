@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
   <script src="bridge.js" defer></script>
+  <script src="sce-practices.js" defer></script>
   <script src="practices.js" defer></script>
 </head>
 <body>
@@ -18,7 +19,7 @@
       <h1>Laboratorio virtual</h1>
       <p class="subtitle">Osciloscopio, generador de funciones y redes trifásicas. Todo desde tu navegador.</p>
     </div>
-    <div class="pill">Versión 0.3 · Prácticas guiadas</div>
+    <div class="pill">Versión 0.4 · Módulos GM y GS</div>
   </div>
 </header>
 <main class="layout">
@@ -57,9 +58,17 @@
   </section>
   <section class="panel" id="practices-controls" hidden>
     <div class="section-heading">
-      <div><h2>Prácticas guiadas</h2><p>Banco inicial de Electrotecnia y Electrónica: trabajo autónomo con medidas, cálculo y comprobación.</p></div>
+      <div><h2>Prácticas guiadas</h2><p>Prácticas de Electrotecnia (0234), Electrónica (0233) y Sistemas y Circuitos Eléctricos (0520, Grado Superior).</p></div>
     </div>
     <div class="practice-top">
+      <label>Módulo de FP
+        <select id="practiceModule">
+          <option value="all">Todos los módulos</option>
+          <option value="Electrotecnia 0234">Electrotecnia · 0234 (Grado Medio)</option>
+          <option value="Electrónica 0233">Electrónica · 0233 (Grado Medio)</option>
+          <option value="Sistemas y Circuitos Eléctricos 0520">Sistemas y Circuitos Eléctricos · 0520 (Grado Superior SEA)</option>
+        </select>
+      </label>
       <label>Selecciona la práctica
         <select id="practiceSelect"></select>
       </label>
