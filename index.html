@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
   <script src="bridge.js" defer></script>
+  <script src="practices.js" defer></script>
 </head>
 <body>
 <header class="header">
@@ -17,7 +18,7 @@
       <h1>Laboratorio virtual</h1>
       <p class="subtitle">Osciloscopio, generador de funciones y redes trifásicas. Todo desde tu navegador.</p>
     </div>
-    <div class="pill">Versión 0.2 · Simulación y análisis</div>
+    <div class="pill">Versión 0.3 · Prácticas guiadas</div>
   </div>
 </header>
 <main class="layout">
@@ -25,6 +26,7 @@
     <button class="tab active" type="button" data-mode="generator" aria-pressed="true">Generador</button>
     <button class="tab" type="button" data-mode="threephase" aria-pressed="false">Trifásica</button>
     <button class="tab" type="button" data-mode="falstad" aria-pressed="false">CircuitJS</button>
+    <button class="tab" type="button" data-mode="practices" aria-pressed="false">Prácticas guiadas</button>
   </nav>
   <section class="panel" id="generator-controls">
     <div class="section-heading"><div><h2>Generador de funciones</h2><p>Señales matemáticas independientes del hardware</p></div></div>
@@ -52,6 +54,20 @@
       <label>Capacitancia por fase · µF (0 = sin condensador)<input id="capacitance" type="number" min="0" step="1" value="0"></label>
     </div>
     <p class="hint">Modelo teórico senoidal en régimen permanente. No incluye todavía desequilibrios, apertura de neutro ni transitorios.</p>
+  </section>
+  <section class="panel" id="practices-controls" hidden>
+    <div class="section-heading">
+      <div><h2>Prácticas guiadas</h2><p>Banco inicial de Electrotecnia y Electrónica: trabajo autónomo con medidas, cálculo y comprobación.</p></div>
+    </div>
+    <div class="practice-top">
+      <label>Selecciona la práctica
+        <select id="practiceSelect"></select>
+      </label>
+      <button type="button" id="practiceLoad" class="toolbtn">Cargar montaje en CircuitJS</button>
+      <button type="button" id="practiceReset" class="toolbtn">Reiniciar respuestas</button>
+    </div>
+    <div id="practiceContent" aria-live="polite"></div>
+    <p id="practiceStatus" class="hint" role="status">Selecciona una práctica. La carga del circuito requiere CircuitJS integrado.</p>
   </section>
   <section class="panel" id="falstad-controls" hidden>
     <div class="section-heading"><div><h2>CircuitJS y osciloscopio</h2><p>Montaje de circuitos y adquisición virtual de tensiones y corrientes por componente.</p></div></div>
