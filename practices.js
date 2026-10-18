@@ -77,11 +77,22 @@
         {label:"Salida XOR para A = 1, B = 1",unit:"0 o 1",value:0,tol:0,reason:"Entradas iguales: XOR = 0."}
       ]
     },
-    ...window.SCE_PRACTICES
+    ...window.SCE_PRACTICES,
+    ...window.LabNetworksSolarPractices
   ];
   const $=id=>document.getElementById(id);
   const content=$("practiceContent"),select=$("practiceSelect"),moduleSelect=$("practiceModule"),status=$("practiceStatus");
   if(!content || !select)return;
+  const MODINFO = {
+    "Electrotecnia 0234":{level:"Grado Medio (GM)",label:"Electrotecnia (0234)"},
+    "Electrónica 0233":{level:"Grado Medio (GM)",label:"Electrónica (0233)"},
+    "Instalaciones de distribución 0236":{level:"Grado Medio (GM)",label:"Instalaciones de distribución (0236)"},
+    "Instalaciones solares fotovoltaicas 0239":{level:"Grado Medio (GM)",label:"Instalaciones solares fotovoltaicas (0239)"},
+    "Sistemas y Circuitos Eléctricos 0520":{level:"Grado Superior (GS)",label:"Sistemas y circuitos eléctricos (0520)"},
+    "Desarrollo de redes eléctricas y centros de transformación 0522":{
+      level:"Grado Superior (GS)",label:"Desarrollo de redes eléctricas y centros de transformación (0522)"}
+  };
+  const moduleInfo=p=>MODINFO[p.module]||{level:"Sin clasificación",label:p.module};
   let attempts=0,lastResults=[];
   function node(tag,cls,text) {
     const el=document.createElement(tag);
@@ -103,7 +114,8 @@
   function render(){
     const p=practice();attempts=0;lastResults=[];
     content.replaceChildren();
-    const tag=node("p","practice-meta",p.code+" · "+p.module+" · Duración orientativa: "+p.duration);
+    const tag=node("p","practice-meta",p.code+" · "+moduleInfo(p).level+
+      " · "+moduleInfo(p).label+" · Duración orientativa: "+p.duration);
     const title=node("h3","practice-title",p.title);
     const desc=node("p","practice-description",p.description);
     const curricularInfo=window.LabCurriculum?.[p.code];
@@ -137,8 +149,9 @@
     }
     const subtitle1=node("h4","practice-subtitle","Objetivos");const objectives=list(p.objectives);
     const subtitle2=node("h4","practice-subtitle","Trabajo propuesto");const steps=list(p.tasks);
-    const note=node("p","practice-note",
-      "Autocorrección: usa los valores originales del circuito. Si has cambiado algún componente, recarga el montaje antes de comprobar. Las medidas de CircuitJS pueden presentar pequeñas diferencias numéricas.");
+    const note=node("p","practice-note",p.file?
+      "Autocorrección: usa los valores originales del circuito. Si has cambiado algún componente, recarga el montaje antes de comprobar. Las medidas de CircuitJS pueden presentar pequeñas diferencias numéricas.":
+      "Práctica de cálculo y análisis sobre un supuesto teórico. No se ha simulado una instalación física ni un equipo real de distribución, CT o fotovoltaica. La autocorrección utiliza los datos del enunciado, no acredita cumplimiento reglamentario.");
     const h=node("h4","practice-subtitle","Hoja de cálculo y comprobación");
     const fields=node("div","practice-questions");
     p.questions.forEach((q,i)=>{
@@ -168,9 +181,15 @@
     p.questions.forEach((q,i)=>solutions.append(node("p","",String(i+1)+". "+q.reason)));
     const summary=node("p","practice-summary");summary.id="practiceSummary";
     content.append(tag,title,desc);
+    window.LabPracticeHasCircuit=Boolean(p.file);
+    const modeIsPractice=document.querySelector('[data-mode="practices"]')?.getAttribute("aria-pressed")==="true";
+    if(modeIsPractice){$("falstad-controls").hidden=!p.file;$("scope-panel").hidden=!p.file;}
+    $("practiceLoad").hidden=!p.file;
     if(curriculum)content.append(curriculum);
     content.append(subtitle1,objectives,subtitle2,steps,note,h,fields,buttons,solutions,summary);
-    status.textContent="Práctica "+p.code+" preparada. Pulsa «Cargar montaje en CircuitJS».";
+    status.textContent=p.file?
+      "Práctica "+p.code+" preparada. Pulsa «Cargar montaje en CircuitJS».":
+      "Práctica "+p.code+" de cálculo y análisis preparada. Completa los ejercicios y comprueba tus respuestas; no necesita simulador externo.";
   }
   function verify(){
     const p=practice();attempts++;
@@ -186,14 +205,17 @@
       lastResults.push({question:q.label,answer,ok});
     });
     $("practiceSummary").textContent="Resultado: "+correct+" de "+p.questions.length+" respuestas correctas (intento "+attempts+").";
-    status.textContent="La autocorrección se refiere al circuito original, no a valores que hayas modificado.";
+    status.textContent=p.file?
+      "La autocorrección se refiere al circuito original, no a valores que hayas modificado.":
+      "La autocorrección se refiere a los datos del supuesto teórico indicado en la ficha.";
   }
   function downloadReport(){
     const p=practice();
     const lines=[
       "LABORATORIO VIRTUAL · HOJA DE PRÁCTICA",
       p.code+" — "+p.title,
-      p.module,
+      moduleInfo(p).label,
+      "Nivel: "+moduleInfo(p).level,
       "Fecha: "+new Date().toLocaleString("es-ES"),
       "",
       "VINCULACIÓN CON EL CURRÍCULO:",
@@ -213,7 +235,7 @@
       ...p.questions.map((q,i)=>String(i+1)+". "+q.label+": "+($("practiceAnswer"+i).value||"(sin respuesta)")+" "+q.unit),
       "",
       "Autocorrección realizada: "+(attempts>0?"sí; intentos: "+attempts:"no"),
-      "Nota: las respuestas se evalúan respecto al circuito original. No son una calificación oficial.",
+      "Nota: las respuestas se evalúan respecto al "+(p.file?"circuito original":"supuesto teórico")+". No son una calificación oficial.",
       "Observaciones personales:",
       "____________________________________________________________",
       "____________________________________________________________"
@@ -244,6 +266,10 @@
   $("practiceReset").addEventListener("click",render);
   $("practiceLoad").addEventListener("click",()=>{
     const p=practice();
+    if(!p.file) {
+      status.textContent="Esta práctica es teórica: realiza los cálculos y utiliza la autocorrección sin CircuitJS.";
+      return;
+    }
     if(!window.LabCircuit){
       status.textContent="Todavía no se ha inicializado la integración con CircuitJS.";
       return;
