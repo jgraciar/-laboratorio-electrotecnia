@@ -14,6 +14,8 @@
   <script src="networks-solar-curriculum.js" defer></script>
   <script src="networks-solar-practices.js" defer></script>
   <script src="practices.js" defer></script>
+  <script src="publications-data.js" defer></script>
+  <script src="publications.js" defer></script>
 </head>
 <body>
 <header class="header">
@@ -23,7 +25,7 @@
       <h1>Laboratorio virtual</h1>
       <p class="subtitle">Osciloscopio, generador de funciones y redes trifásicas. Todo desde tu navegador.</p>
     </div>
-    <div class="pill">Versión 0.7 · Circuitos en todas las prácticas</div>
+    <div class="pill">Versión 0.8 · Publicaciones y actividades</div>
   </div>
 </header>
 <main class="layout">
@@ -32,6 +34,7 @@
     <button class="tab" type="button" data-mode="threephase" aria-pressed="false">Trifásica</button>
     <button class="tab" type="button" data-mode="falstad" aria-pressed="false">CircuitJS</button>
     <button class="tab" type="button" data-mode="practices" aria-pressed="false">Prácticas guiadas</button>
+    <button class="tab" type="button" data-mode="publications" aria-pressed="false">Publicaciones</button>
   </nav>
   <section class="panel" id="generator-controls">
     <div class="section-heading"><div><h2>Generador de funciones</h2><p>Señales matemáticas independientes del hardware</p></div></div>
@@ -59,6 +62,20 @@
       <label>Capacitancia por fase · µF (0 = sin condensador)<input id="capacitance" type="number" min="0" step="1" value="0"></label>
     </div>
     <p class="hint">Modelo teórico senoidal en régimen permanente. No incluye todavía desequilibrios, apertura de neutro ni transitorios.</p>
+  </section>
+  <section class="panel" id="publications-controls" hidden>
+    <div class="section-heading"><div><h2>Publicaciones y actividades</h2>
+      <p>Catálogo bibliográfico con unidades, actividades identificadas y prácticas del laboratorio relacionadas.</p></div></div>
+    <div class="publication-filters">
+      <label>Publicación
+        <select id="publicationSelect"></select>
+      </label>
+      <label>Unidad didáctica
+        <select id="publicationUnit"></select>
+      </label>
+    </div>
+    <div id="publicationContent" aria-live="polite"></div>
+    <p class="hint">Las referencias corresponden a las páginas impresas de la edición indicada. Los títulos de actividades se identifican sin reproducir los enunciados, gráficos, soluciones ni contenido protegido del libro.</p>
   </section>
   <section class="panel" id="practices-controls" hidden>
     <div class="section-heading">
