@@ -1,6 +1,5 @@
 "use strict";
-// Catálogo bibliográfico y referencias identificadas en el libro del docente.
-// NO contiene ni publica texto, ilustraciones o soluciones protegidos.
+// Referencias del ejemplar consultado, sin enunciados protegidos.
 window.LabPublications = [
   {
     "id": "paraninfo-electrotecnia-2022",
@@ -12,7 +11,7 @@ window.LabPublications = [
     "cycle": "Grado Medio · Instalaciones Eléctricas y Automáticas",
     "module": "Electrotecnia · 0234",
     "source": "Índice y actividades identificados en el ejemplar facilitado por el docente; páginas impresas, no páginas del visor PDF.",
-    "status": "Índice completo de 21 unidades. Extracción de actividades concretas iniciada por la unidad 2.",
+    "status": "Índice completo de 21 unidades. Primera identificación individual de prácticas y actividades en las unidades 1, 2 y 3.",
     "printedToPdfOffset": 26,
     "units": [
       {
@@ -496,26 +495,18 @@ window.LabPublications = [
     ],
     "numberedActivities": [
       {
-        "unit": 2,
-        "id": "Práctica 2.1",
-        "page": 33,
-        "theme": "Comprobación de la ley de Ohm",
-        "practiceCode": "E01",
+        "unit": 1,
+        "id": "Práctica 1.1",
+        "page": 18,
+        "theme": "Experiencias sobre los efectos de la corriente eléctrica",
+        "practiceCode": null,
         "status": "identificada"
       },
       {
-        "unit": 2,
-        "id": "Práctica 2.2",
-        "page": 33,
-        "theme": "Longitud, sección y resistencia del conductor",
-        "practiceCode": "ID02",
-        "status": "identificada"
-      },
-      {
-        "unit": 2,
-        "id": "Práctica 2.3",
-        "page": 33,
-        "theme": "Influencia de la temperatura en una resistencia",
+        "unit": 1,
+        "id": "Práctica 1.2",
+        "page": 18,
+        "theme": "Formas de producción de energía eléctrica",
         "practiceCode": null,
         "status": "identificada"
       },
@@ -540,6 +531,46 @@ window.LabPublications = [
         "id": "Actividad propuesta 2.3",
         "page": 29,
         "theme": "Influencia de la temperatura en la resistencia",
+        "practiceCode": null,
+        "status": "identificada"
+      },
+      {
+        "unit": 2,
+        "id": "Práctica 2.1",
+        "page": 33,
+        "theme": "Comprobación de la ley de Ohm",
+        "practiceCode": "E01",
+        "status": "identificada"
+      },
+      {
+        "unit": 2,
+        "id": "Práctica 2.2",
+        "page": 33,
+        "theme": "Longitud, sección y resistencia del conductor",
+        "practiceCode": "ID02",
+        "status": "identificada"
+      },
+      {
+        "unit": 2,
+        "id": "Práctica 2.3",
+        "page": 33,
+        "theme": "Influencia de la temperatura en una resistencia",
+        "practiceCode": null,
+        "status": "identificada"
+      },
+      {
+        "unit": 3,
+        "id": "Práctica 3.1",
+        "page": 43,
+        "theme": "Medida y cálculo de la potencia eléctrica",
+        "practiceCode": "E01",
+        "status": "identificada"
+      },
+      {
+        "unit": 3,
+        "id": "Práctica 3.2",
+        "page": 43,
+        "theme": "Medida de la energía consumida por receptores",
         "practiceCode": null,
         "status": "identificada"
       }
