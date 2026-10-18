@@ -2,7 +2,11 @@
 (() => {
   const $ = id => document.getElementById(id);
   let mode = "generator";
-  let falstadLoaded = false;
+  let externalRecords = [];
+  let cursorEnabled = false;
+  let spectrumEnabled = false;
+  let cursors = [0.25,0.75];
+  let draggingCursor = -1;
   const COLORS = ["#65c3f8","#f9b866","#72deb1"];
   const TAU = Math.PI * 2;
   const num = id => Number($(id).value);
@@ -60,6 +64,42 @@
     return {uLine,frequency,ur,ir,z,phi,x,r,angles};
   }
   function sampleSet() {
+
+    if (mode === "falstad") {
+      const windowSec = clamp(finite(num("sampleWindow"),100),1,10000)/1000;
+      if(externalRecords.length<2) {
+        showMetrics([["Estado","Sin muestras"],["Ventana",fmt(windowSec*1000)+" ms"]]);
+        return {frequency:2/windowSec,traces:[],unit:"V"};
+      }
+      const end = externalRecords[externalRecords.length-1].t, start=end-windowSec;
+      const samples = externalRecords.filter(p=>p.t>=start && p.t<=end);
+      const quantity = $("elementQuantity").value==="current"?"i":"v";
+      const unit=quantity==="i"?"A":"V";
+      const values=samples.map(p=>p[quantity]).filter(Number.isFinite);
+      if(values.length<2) {
+        showMetrics([["Estado","Esperando adquisición"]]);
+        return {frequency:2/windowSec,traces:[],unit};
+      }
+      const min=Math.min(...values), max=Math.max(...values);
+      const average=values.reduce((a,b)=>a+b,0)/values.length;
+      const rms=Math.sqrt(values.reduce((a,b)=>a+b*b,0)/values.length);
+      const interpolate=(t)=>{
+        const absolute=end-windowSec+t;
+        if(absolute<=samples[0].t)return samples[0][quantity];
+        if(absolute>=samples[samples.length-1].t)return samples[samples.length-1][quantity];
+        let low=0,high=samples.length-1;
+        while(high-low>1){const mid=(low+high)>>1;if(samples[mid].t<absolute)low=mid;else high=mid;}
+        const p=samples[low],q=samples[high];
+        return p[quantity]+(q[quantity]-p[quantity])*((absolute-p.t)/(q.t-p.t));
+      };
+      showMetrics([["Vpp",fmt(max-min)+" "+unit],["RMS",fmt(rms)+" "+unit],
+        ["Valor medio",fmt(average)+" "+unit],["Muestras",String(samples.length)],
+        ["Ventana",fmt(windowSec*1000)+" ms"]]);
+      return {frequency:2/windowSec,traces:[{
+        name:quantity==="i"?"Corriente del componente":"Tensión del componente",
+        color:COLORS[0],value:interpolate
+      }],unit};
+    }
     if (mode === "threephase") {
       const s = getThreephase();
       const peak = Math.SQRT2*s.ur, currentPeak = Math.SQRT2*s.ir;
@@ -130,8 +170,87 @@
     ]);
     return {frequency:s.frequency,traces,unit:"V"};
   }
+
+  function paintCursors(ctx,w,h,gw,gh,padLeft,padTop,frequency,traces,unit){
+    if(!cursorEnabled || traces.length===0) {$("cursorReadout").textContent="";return;}
+    const dt=Math.abs(cursors[1]-cursors[0])*2/frequency;
+    ctx.save();ctx.setLineDash([5,5]);
+    cursors.forEach((position,i)=>{
+      ctx.strokeStyle=i===0?"#e7e8ff":"#ffe08d";ctx.lineWidth=1.4;
+      const x=padLeft+gw*position;
+      ctx.beginPath();ctx.moveTo(x,padTop);ctx.lineTo(x,padTop+gh);ctx.stroke();
+    });
+    ctx.restore();
+    const a=traces[0].value(2*cursors[0]/frequency);
+    const b=traces[0].value(2*cursors[1]/frequency);
+    $("cursorReadout").textContent="Δt "+fmt(dt*1000,5)+" ms · 1/Δt "+
+      (dt>1e-12?fmt(1/dt,5)+" Hz":"—")+" · Δ"+unit+" "+fmt(b-a,5)+" "+unit;
+  }
+  function renderSpectrum(values,frequency){
+    const panel=$("spectrum-panel");
+    panel.hidden=!spectrumEnabled;
+    if(!spectrumEnabled)return;
+    const spectrum=$("spectrum"),rect=spectrum.getBoundingClientRect();
+    if(rect.width<2)return;
+    const dpi=Math.min(2.5,window.devicePixelRatio||1);
+    spectrum.width=Math.round(rect.width*dpi);spectrum.height=Math.round(rect.height*dpi);
+    const ctx=spectrum.getContext("2d");ctx.setTransform(dpi,0,0,dpi,0,0);
+    const w=rect.width,h=rect.height;
+    ctx.clearRect(0,0,w,h);
+    if(!values || values.length<20){
+      $("spectrumInfo").textContent="Selecciona una señal para analizar.";
+      return;
+    }
+    const data=values.slice(0,-1),n=data.length;
+    const mean=data.reduce((a,b)=>a+b,0)/n;
+    const harmonics=[];
+    for(let harmonic=1;harmonic<=15;harmonic++){
+      let real=0,imag=0;
+      for(let i=0;i<n;i++){
+        const angle=4*Math.PI*harmonic*i/n;
+        real+=(data[i]-mean)*Math.cos(angle);
+        imag-=(data[i]-mean)*Math.sin(angle);
+      }
+      harmonics.push(Math.hypot(real,imag)*2/n);
+    }
+    const fundamental=harmonics[0];
+    const thd=fundamental>1e-9 ?
+      Math.sqrt(harmonics.slice(1).reduce((sum,v)=>sum+v*v,0))/fundamental*100:NaN;
+    const max=Math.max(...harmonics,1e-9);
+    const left=38,top=10,plotH=h-35,plotW=w-left-10;
+    ctx.strokeStyle="#55718d";ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,top+plotH);
+    ctx.lineTo(left+plotW,top+plotH);ctx.stroke();
+    const slot=plotW/15;
+    harmonics.forEach((value,i)=>{
+      const barH=plotH*(value/max);
+      ctx.fillStyle=i===0?"#65c3f8":"#f9b866";
+      ctx.fillRect(left+slot*i+slot*0.17,top+plotH-barH,slot*0.66,barH);
+      ctx.fillStyle="#aebed3";ctx.font="10px system-ui";ctx.textAlign="center";
+      ctx.fillText("H"+(i+1),left+slot*(i+.5),top+plotH+14);
+    });
+    ctx.textAlign="left";
+    $("spectrumInfo").textContent=mode==="falstad"?
+      "Espectro por armónicos de la ventana: la frecuencia fundamental real no está verificada; no se presenta THD.":
+      "Fundamental: "+fmt(frequency)+" Hz · H1 (pico): "+fmt(fundamental,5)+" · THD aproximada (H2–H15): "+fmt(thd,3)+" %";
+  }
+  function exportCsv(){
+    const {frequency,traces,unit}=sampleSet();
+    if(traces.length===0)return;
+    const n=1000,duration=2/frequency;
+    const rows=[["t_s",...traces.map(tr=>tr.name+"_"+unit)].join(",")];
+    for(let i=0;i<=n;i++){
+      const time=duration*i/n;
+      rows.push([time,...traces.map(tr=>tr.value(time))].map(n=>Number(n).toPrecision(12)).join(","));
+    }
+    const blob=new Blob([rows.join("\n")+"\n"],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;
+    a.download="laboratorio_"+mode+"_"+Date.now()+".csv";
+    document.body.append(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+
   function draw() {
-    if (mode === "falstad") return;
     const {frequency,traces,unit} = sampleSet();
     const canvas = $("scope");
     const bounds = canvas.getBoundingClientRect();
@@ -185,13 +304,17 @@
       }
       ctx.stroke();
     });
+    paintCursors(ctx,w,h,gw,gh,padLeft,padTop,frequency,traces,unit);
+    renderSpectrum(tracePoints[0],frequency);
     const legend=$("legend");
     legend.replaceChildren(...traces.map(t=>{
       const span=document.createElement("span"),bar=document.createElement("i");
       bar.style.background=t.color;
       span.append(bar,document.createTextNode(t.name));return span;
     }));
-    $("scope-subtitle").textContent="Dos periodos · "+fmt(frequency)+" Hz · "+(mode==="threephase"?"red equilibrada":"funciones virtuales");
+    $("scope-subtitle").textContent=mode==="falstad"?
+      "Señal de CircuitJS · ventana "+fmt(2000/frequency)+" ms · valores simulados":
+      "Dos periodos · "+fmt(frequency)+" Hz · "+(mode==="threephase"?"red equilibrada":"funciones virtuales");
   }
   function setMode(next) {
     mode=next;
@@ -203,12 +326,9 @@
     $("generator-controls").hidden=mode!=="generator";
     $("threephase-controls").hidden=mode!=="threephase";
     $("falstad-controls").hidden=mode!=="falstad";
-    $("scope-panel").hidden=mode==="falstad";
+    $("scope-panel").hidden=false;
     $("trace-mode-label").hidden=mode!=="threephase";
-    if(mode==="falstad" && !falstadLoaded){
-      $("circuit-frame").src=$("circuit-frame").dataset.src;
-      falstadLoaded=true;
-    }
+
     draw();
   }
   document.querySelectorAll("[data-mode]").forEach(button=>{
@@ -219,6 +339,51 @@
     "lineVoltage","threeFrequency","sequence","resistance","inductance","capacitance","traceMode"
   ];
   controls.forEach(id=>$(id).addEventListener("input",draw));
+
+  $("cursorsToggle").addEventListener("click",()=>{
+    cursorEnabled=!cursorEnabled;
+    $("cursorsToggle").setAttribute("aria-pressed",String(cursorEnabled));
+    $("cursorsToggle").textContent=cursorEnabled?"Cursores: activados":"Cursores: desactivados";
+    draw();
+  });
+  $("spectrumToggle").addEventListener("click",()=>{
+    spectrumEnabled=!spectrumEnabled;
+    $("spectrumToggle").setAttribute("aria-pressed",String(spectrumEnabled));
+    $("spectrum-panel").hidden=!spectrumEnabled;
+    draw();
+  });
+  $("exportCsv").addEventListener("click",exportCsv);
+  ["elementQuantity","sampleWindow"].forEach(id=>$(id).addEventListener("input",draw));
+  const canvas=$("scope");
+  const getCursorPos=event=>{
+    const rect=canvas.getBoundingClientRect(),left=49,width=rect.width-49-14;
+    return clamp((event.clientX-rect.left-left)/width,0,1);
+  };
+  canvas.addEventListener("pointerdown",event=>{
+    if(!cursorEnabled)return;
+    const pos=getCursorPos(event);
+    draggingCursor=Math.abs(cursors[0]-pos)<Math.abs(cursors[1]-pos)?0:1;
+    cursors[draggingCursor]=pos;
+    canvas.setPointerCapture(event.pointerId);
+    draw();
+  });
+  canvas.addEventListener("pointermove",event=>{
+    if(draggingCursor<0)return;
+    cursors[draggingCursor]=getCursorPos(event);draw();
+  });
+  const release=()=>{draggingCursor=-1;};
+  canvas.addEventListener("pointerup",release);
+  canvas.addEventListener("pointercancel",release);
+  window.LabScope={
+    setCircuitRecords(records){
+      externalRecords=Array.isArray(records)?records.slice(-5000):[];
+      if(mode==="falstad")draw();
+    },
+    clearCircuit(){
+      externalRecords=[];if(mode==="falstad")draw();
+    },
+    refresh:draw
+  };
   window.addEventListener("resize",draw);
   setMode("generator");
 })();
