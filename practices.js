@@ -118,7 +118,7 @@
       const ul=node("ul","practice-ce-list");
       curricularInfo.criteria.forEach(([code,summary])=>{
         const li=node("li","practice-ce-item");
-        li.append(node("strong","practice-ce-code","CE "+curricularInfo.ra.replace("RA","")+"."+code));
+        li.append(node("strong","practice-ce-code","CE "+curricularInfo.ra.replace("RA","")+code));
         li.append(node("span","practice-ce-summary",summary));
         ul.append(li);
       });
@@ -200,7 +200,7 @@
       ...(window.LabCurriculum?.[p.code]?[
         window.LabCurriculum[p.code].ra+": "+window.LabCurriculum[p.code].title,
         ...window.LabCurriculum[p.code].criteria.map(([code,summary])=>
-          "CE "+window.LabCurriculum[p.code].ra.replace("RA","")+"."+code+": "+summary),
+          "CE "+window.LabCurriculum[p.code].ra.replace("RA","")+code+": "+summary),
         "Advertencia: vinculación parcial; no acredita por sí sola todos los CE.",
         ...(window.LabCurriculum[p.code].caution?[window.LabCurriculum[p.code].caution]:[]),
         "Normativa: "+(window.LabCurriculumSources?.[p.module]||"Consultar BOE")
