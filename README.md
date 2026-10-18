@@ -4,7 +4,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 **Web publicada desde el repositorio:** https://jgraciar.github.io/-laboratorio-electrotecnia/
 
-**Versión 0.5 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
+**Versión 0.6 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
 
 ## Funciones implementadas
 
@@ -18,7 +18,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 ## Banco inicial de prácticas guiadas
 
-La pestaña **Prácticas guiadas** incluye seis propuestas basadas en archivos de circuito existentes y comprobados del catálogo oficial de CircuitJS:
+La pestaña **Prácticas guiadas** incluye seis propuestas iniciales basadas en archivos de circuito existentes y comprobados del catálogo oficial de CircuitJS:
 
 | Código | Módulo | Práctica | Circuito CircuitJS |
 |---|---|---|---|
@@ -63,6 +63,49 @@ Todas estas actividades incluyen objetivos, procedimiento, teoría de apoyo, pre
 **Versión 0.5:** abre **Prácticas guiadas**, selecciona un módulo y después una práctica. Justo debajo del enunciado aparece el apartado **«Resultados de aprendizaje y criterios de evaluación vinculados»**, con el número y la redacción del RA, una lista de CE identificados individualmente (por ejemplo, **CE 1b**, **CE 1c**), una descripción legible de cada criterio y el enlace directo al real decreto en el BOE. Las fichas de los **tres módulos** incluyen esa información.
 
 La correspondencia es **parcial**: no se presupone que una simulación certifique la totalidad de un CE ni los ensayos/medidas reales requeridos en el taller. El informe TXT incorpora también el RA, los CE y su normativa de referencia. Las descripciones de los CE están adaptadas para lectura didáctica; el texto jurídico íntegro se consulta en el BOE.
+
+## Seis módulos con denominación oficial y nivel
+
+La lista de **Prácticas guiadas** presenta todos los módulos con su nombre oficial, código y nivel, agrupados por ciclo. El nombre abreviado usado internamente no se muestra al alumno:
+
+| Nivel | Módulo | Código | Prácticas |
+|---|---|---|---:|
+| GM · Instalaciones Eléctricas y Automáticas | Electrónica | 0233 | 2 |
+| GM · Instalaciones Eléctricas y Automáticas | Electrotecnia | 0234 | 4 |
+| GM · Instalaciones Eléctricas y Automáticas | Instalaciones de distribución | 0236 | 4 |
+| GM · Instalaciones Eléctricas y Automáticas | Instalaciones solares fotovoltaicas | 0239 | 4 |
+| GS · Sistemas Electrotécnicos y Automatizados | Sistemas y circuitos eléctricos | 0520 | 6 |
+| GS · Sistemas Electrotécnicos y Automatizados | Desarrollo de redes eléctricas y centros de transformación | 0522 | 4 |
+| | **Total** | | **24** |
+
+El nombre oficial del módulo 0522 empieza con «Desarrollo de». Denominaciones confirmadas según **RD 177/2008** (módulos 0233, 0234, 0236 y 0239) y **RD 1127/2010** (módulos 0520 y 0522).
+
+### Nuevas prácticas de los módulos 0236, 0239 y 0522
+
+**GM · Instalaciones de distribución (0236):**
+
+- ID01. Centro de transformación: magnitudes nominales (RA1)
+- ID02. Red monofásica de baja tensión: caída de tensión (RA2)
+- ID03. Instalación de enlace: intensidad y caída simplificada (RA3)
+- ID04. Red radial de BT: caída de tensión por tramos (RA2)
+
+**GM · Instalaciones solares fotovoltaicas (0239):**
+
+- FV01. Módulos fotovoltaicos en serie y paralelo (RA2)
+- FV02. Estimación energética y horas solares pico (RA2)
+- FV03. Dimensionado energético teórico de batería (RA2)
+- FV04. Condiciones eléctricas de entrada de un regulador MPPT (RA2)
+
+**GS · Desarrollo de redes eléctricas y centros de transformación (0522):**
+
+- DR01. Parámetros y caída de tensión trifásica en red BT (RA2)
+- DR02. Magnitudes nominales de un CT trifásico (RA5)
+- DR03. Comparación de secciones en red trifásica (RA3)
+- DR04. Ensayos de transformador: balance simplificado de pérdidas (RA6)
+
+Las 12 prácticas nuevas son ejercicios **de cálculo y análisis sobre supuestos teóricos** con autocorrección e informe descargable. No se atribuye falsamente una simulación fotovoltaica, una red física o un centro de transformación real al simulador CircuitJS. Por ello, cuando se abre una de estas fichas, se ocultan los controles de CircuitJS y el osciloscopio, que permanecerán disponibles para las prácticas anteriores con montaje simulable.
+
+Todas las fichas muestran el RA y los CE relacionados, con descripción didáctica de cada criterio, advertencia de alcance parcial y enlace a la normativa oficial. Los cálculos eléctricos utilizados son simplificaciones explícitas; **no sustituyen las comprobaciones reglamentarias ni las medidas o ensayos sobre instalaciones reales**.
 
 ## Integración con CircuitJS
 
