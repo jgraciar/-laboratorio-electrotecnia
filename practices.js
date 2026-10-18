@@ -106,9 +106,35 @@
     const tag=node("p","practice-meta",p.code+" · "+p.module+" · Duración orientativa: "+p.duration);
     const title=node("h3","practice-title",p.title);
     const desc=node("p","practice-description",p.description);
-    const curriculum=p.ra?node("p","practice-curriculum",
-      "Vinculación curricular orientativa: "+p.ra+
-      (p.ce?.length?" · CE "+p.ce.join(", "):"")):null;
+    const curricularInfo=window.LabCurriculum?.[p.code];
+    const curriculum=curricularInfo?node("section","practice-curriculum-detail"):null;
+    if(curriculum) {
+      curriculum.append(node("h4","practice-curriculum-title","Resultados de aprendizaje y criterios de evaluación vinculados"));
+      const ra=node("div","practice-ra");
+      ra.append(node("strong","practice-ra-code",curricularInfo.ra+" · RESULTADO DE APRENDIZAJE"));
+      ra.append(node("p","practice-ra-desc",curricularInfo.title));
+      curriculum.append(ra);
+      curriculum.append(node("h5","practice-ce-label","Criterios de evaluación (CE) relacionados con esta práctica"));
+      const ul=node("ul","practice-ce-list");
+      curricularInfo.criteria.forEach(([code,summary])=>{
+        const li=node("li","practice-ce-item");
+        li.append(node("strong","practice-ce-code","CE "+curricularInfo.ra.replace("RA","")+"."+code));
+        li.append(node("span","practice-ce-summary",summary));
+        ul.append(li);
+      });
+      curriculum.append(ul);
+      if(curricularInfo.caution) {
+        curriculum.append(node("p","practice-curriculum-warning",curricularInfo.caution));
+      }
+      curriculum.append(node("p","practice-curriculum-limit",
+        "Correspondencia curricular parcial: la práctica aporta evidencias relacionadas con estos CE, pero no acredita automáticamente su cumplimiento completo."));
+      const source=window.LabCurriculumSources?.[p.module];
+      if(source){
+        const link=node("a","practice-source","Consultar el currículo oficial (BOE) ↗");
+        link.href=source;link.target="_blank";link.rel="noopener noreferrer";
+        curriculum.append(link);
+      }
+    }
     const subtitle1=node("h4","practice-subtitle","Objetivos");const objectives=list(p.objectives);
     const subtitle2=node("h4","practice-subtitle","Trabajo propuesto");const steps=list(p.tasks);
     const note=node("p","practice-note",
@@ -170,6 +196,16 @@
       p.module,
       "Fecha: "+new Date().toLocaleString("es-ES"),
       "",
+      "VINCULACIÓN CON EL CURRÍCULO:",
+      ...(window.LabCurriculum?.[p.code]?[
+        window.LabCurriculum[p.code].ra+": "+window.LabCurriculum[p.code].title,
+        ...window.LabCurriculum[p.code].criteria.map(([code,summary])=>
+          "CE "+window.LabCurriculum[p.code].ra.replace("RA","")+"."+code+": "+summary),
+        "Advertencia: vinculación parcial; no acredita por sí sola todos los CE.",
+        ...(window.LabCurriculum[p.code].caution?[window.LabCurriculum[p.code].caution]:[]),
+        "Normativa: "+(window.LabCurriculumSources?.[p.module]||"Consultar BOE")
+      ]:["No disponible"]),
+      "",
       "Objetivos:",
       ...p.objectives.map(x=>"- "+x),
       "",
@@ -195,7 +231,8 @@
     const filtered=PRACTICES.filter(p=>selectedModule==="all"||p.module===selectedModule);
     select.replaceChildren();
     filtered.forEach(p=>{
-      const option=node("option","",p.code+" · "+p.title);
+      const option=node("option","",p.code+" · "+p.title+
+        (window.LabCurriculum?.[p.code]?" ["+window.LabCurriculum[p.code].ra+"]":""));
       option.value=p.code;select.append(option);
     });
     select.value=filtered.some(p=>p.code===prior)?prior:(filtered[0]?.code||"");
