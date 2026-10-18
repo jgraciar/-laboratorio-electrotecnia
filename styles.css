@@ -58,3 +58,27 @@ footer a{color:#92ccff}
 .spectrum-panel h3{font-size:14px;margin:0 0 10px}
 .spectrum-canvas{height:195px;border-radius:8px;background:#0c1929;overflow:hidden}
 .spectrum-canvas canvas{display:block;width:100%;height:100%}
+
+
+/* Guías didácticas — versión 0.3 */
+.practice-top{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.practice-top label{flex:1 1 290px}
+.practice-title{font-size:19px;margin:0 0 8px}
+.practice-description{color:#dfebfc;font-size:14px;margin:0 0 12px}
+.practice-meta{font-size:12px;color:#9ac7ff;font-weight:750;letter-spacing:.025em;margin:0 0 7px}
+.practice-subtitle{margin:15px 0 8px;font-size:14px;color:#d7e9ff}
+.practice-steps{padding-left:26px;margin:6px 0 13px;color:#c6d7e9}
+.practice-steps li{margin:5px 0}
+.practice-note{padding:10px 12px;background:#263c57;border-left:3px solid #7cb2ea;border-radius:4px;font-size:12px;color:#cde0f2}
+.practice-questions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.practice-question{background:#1c3049;padding:13px;border:1px solid #344f71;border-radius:8px}
+.practice-question label{line-height:1.4;min-height:32px}
+.practice-question input{margin-top:8px}
+.practice-feedback{display:block;min-height:20px;font-size:12px;margin-top:7px}
+.practice-correct{color:#91e5ba}
+.practice-incorrect{color:#f7b69c}
+.practice-actions{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0}
+.practice-summary{color:#aadaff;font-weight:700;font-size:13px}
+.practice-solutions{margin-top:10px;background:#253a52;padding:14px;border:1px solid #536d89;border-radius:8px}
+.practice-solutions p{font-size:13px;margin:6px 0}
+@media(max-width:650px){.practice-questions{grid-template-columns:1fr}.practice-question label{min-height:0}}
