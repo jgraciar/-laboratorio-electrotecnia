@@ -1,0 +1,77 @@
+name: Publicar laboratorio con CircuitJS integrado
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Compilar laboratorio y CircuitJS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener laboratorio
+        uses: actions/checkout@v4
+        with:
+          path: laboratorio
+
+      - name: Obtener código oficial de CircuitJS
+        uses: actions/checkout@v4
+        with:
+          repository: pfalstad/circuitjs1
+          ref: 5a707168778216bb6ed01bfdd62e8bbf7ae0a032
+          path: circuitjs-src
+
+      - name: Preparar Java para compilador GWT
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Compilar CircuitJS
+        working-directory: circuitjs-src
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon compileGwt makeSite --console plain
+
+      - name: Preparar sitio estático de GitHub Pages
+        run: |
+          mkdir -p public/circuitjs
+          cp laboratorio/index.html laboratorio/styles.css laboratorio/app.js laboratorio/bridge.js laboratorio/LICENSE public/
+          cp -a circuitjs-src/site/. public/circuitjs/
+          cp circuitjs-src/COPYING.txt public/circuitjs/COPYING.txt
+          test -f public/index.html
+          test -f public/circuitjs/circuitjs.html
+          test -f public/circuitjs/circuitjs1/circuitjs1.nocache.js
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Adjuntar sitio compilado
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    name: Desplegar en GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - name: Publicar sitio
+        id: pages
+        uses: actions/deploy-pages@v4
