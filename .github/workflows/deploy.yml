@@ -49,10 +49,11 @@ jobs:
       - name: Preparar sitio estático de GitHub Pages
         run: |
           mkdir -p public/circuitjs
-          cp laboratorio/index.html laboratorio/styles.css laboratorio/app.js laboratorio/bridge.js laboratorio/LICENSE public/
+          cp laboratorio/index.html laboratorio/styles.css laboratorio/app.js laboratorio/bridge.js laboratorio/practices.js laboratorio/LICENSE public/
           cp -a circuitjs-src/site/. public/circuitjs/
           cp circuitjs-src/COPYING.txt public/circuitjs/COPYING.txt
           test -f public/index.html
+          test -f public/practices.js
           test -f public/circuitjs/circuitjs.html
           test -f public/circuitjs/circuitjs1/circuitjs1.nocache.js
 
