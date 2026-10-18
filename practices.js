@@ -148,10 +148,18 @@
       }
     }
     const subtitle1=node("h4","practice-subtitle","Objetivos");const objectives=list(p.objectives);
-    const subtitle2=node("h4","practice-subtitle","Trabajo propuesto");const steps=list(p.tasks);
-    const note=node("p","practice-note",p.file?
+    const subtitle2=node("h4","practice-subtitle","Trabajo propuesto");
+    const tasks=p.modelNote?[
+      "Pulsa «Cargar montaje en CircuitJS». Observa la fuente, los conductores y los receptores equivalentes. Selecciona un componente para visualizar tensión o corriente.",
+      ...p.tasks,
+      "Modifica un valor del modelo en Falstad, vuelve a medir y explica el cambio. Conserva las respuestas calculadas con los datos originales."
+    ]:p.tasks;
+    const steps=list(tasks);
+    const note=node("p","practice-note",p.modelNote?
+      "Modelo Falstad equivalente y modificable: la autocorrección utiliza las hipótesis del enunciado. Tras modificar el circuito, distingue los cálculos originales de los valores simulados. No representa una instalación reglamentaria.":
+      (p.file?
       "Autocorrección: usa los valores originales del circuito. Si has cambiado algún componente, recarga el montaje antes de comprobar. Las medidas de CircuitJS pueden presentar pequeñas diferencias numéricas.":
-      "Práctica de cálculo y análisis sobre un supuesto teórico. No se ha simulado una instalación física ni un equipo real de distribución, CT o fotovoltaica. La autocorrección utiliza los datos del enunciado, no acredita cumplimiento reglamentario.");
+      "Cálculo teórico; no sustituye la comprobación sobre equipos reales."));
     const h=node("h4","practice-subtitle","Hoja de cálculo y comprobación");
     const fields=node("div","practice-questions");
     p.questions.forEach((q,i)=>{
@@ -181,6 +189,12 @@
     p.questions.forEach((q,i)=>solutions.append(node("p","",String(i+1)+". "+q.reason)));
     const summary=node("p","practice-summary");summary.id="practiceSummary";
     content.append(tag,title,desc);
+    if(p.modelNote) {
+      const equiv=node("section","practice-model-note");
+      equiv.append(node("strong","","Modelo equivalente de Falstad"));
+      equiv.append(node("p","",p.modelNote));
+      content.append(equiv);
+    }
     window.LabPracticeHasCircuit=Boolean(p.file);
     const modeIsPractice=document.querySelector('[data-mode="practices"]')?.getAttribute("aria-pressed")==="true";
     if(modeIsPractice){$("falstad-controls").hidden=!p.file;$("scope-panel").hidden=!p.file;}
@@ -218,6 +232,7 @@
       "Nivel: "+moduleInfo(p).level,
       "Fecha: "+new Date().toLocaleString("es-ES"),
       "",
+      ...(p.modelNote?["MODELO DE CIRCUITJS:",p.modelNote,""]:[]),
       "VINCULACIÓN CON EL CURRÍCULO:",
       ...(window.LabCurriculum?.[p.code]?[
         window.LabCurriculum[p.code].ra+": "+window.LabCurriculum[p.code].title,
