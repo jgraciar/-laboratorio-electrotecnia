@@ -4,7 +4,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 **Web publicada desde el repositorio:** https://jgraciar.github.io/-laboratorio-electrotecnia/
 
-**Versión 0.7 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
+**Versión 0.8 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
 
 ## Funciones implementadas
 
@@ -63,6 +63,25 @@ Todas estas actividades incluyen objetivos, procedimiento, teoría de apoyo, pre
 **Versión 0.5:** abre **Prácticas guiadas**, selecciona un módulo y después una práctica. Justo debajo del enunciado aparece el apartado **«Resultados de aprendizaje y criterios de evaluación vinculados»**, con el número y la redacción del RA, una lista de CE identificados individualmente (por ejemplo, **CE 1b**, **CE 1c**), una descripción legible de cada criterio y el enlace directo al real decreto en el BOE. Las fichas de los **tres módulos** incluyen esa información.
 
 La correspondencia es **parcial**: no se presupone que una simulación certifique la totalidad de un CE ni los ensayos/medidas reales requeridos en el taller. El informe TXT incorpora también el RA, los CE y su normativa de referencia. Las descripciones de los CE están adaptadas para lectura didáctica; el texto jurídico íntegro se consulta en el BOE.
+
+## Publicaciones y actividades del libro de texto
+
+La versión 0.8 añade la pestaña **Publicaciones**, preparada para incorporar varias editoriales y manuales, comenzando por la primera obra identificada y contrastada:
+
+- **Título:** *Electrotecnia*.
+- **Autor:** Pablo Alcalde San Miguel.
+- **Editorial:** Ediciones Paraninfo.
+- **Edición:** séptima, 2022.
+- **ISBN:** 978-84-1366-155-1.
+- **Enseñanza:** GM · Instalaciones Eléctricas y Automáticas, módulo 0234 Electrotecnia.
+
+Se ha consultado el ejemplar original que el docente tenía en su biblioteca. El catálogo incluye las **21 unidades didácticas**, la localización de **67 secciones de actividades** comprobadas en el índice, sus páginas impresas y su correspondencia de página dentro del PDF del docente (26 páginas de diferencia para esta edición). La unidad 9 figura con secciones pendientes de verificar porque su índice presenta un problema de extracción, sin inventar números de página.
+
+La **primera extracción individual de actividades**, en la Unidad 2, identifica seis referencias numéricas contrastadas: *Prácticas 2.1, 2.2 y 2.3* (p. 33), *Actividades propuestas 2.1* (p. 25), *2.2* (p. 27) y *2.3* (p. 29). Cada una se etiqueta por su tema y, si existe una práctica afín del laboratorio, muestra un botón para abrirla directamente. Las actividades del libro y las prácticas propias del laboratorio se distinguen expresamente, sin presentar una como reproducción de la otra.
+
+La selección de unidades en la web se puede ampliar gradualmente hasta la identificación individual del resto de actividades; el índice no implica que todas las actividades hayan sido ya trasladadas o corregidas automáticamente.
+
+**Derechos de autor:** la web publica referencias bibliográficas, unidades, secciones, localizadores de página y ejercicios propios. **No aloja ni distribuye el PDF, las ilustraciones, las soluciones ni el texto completo de los ejercicios protegidos del manual.** El acceso al libro requiere el ejemplar legítimo del usuario.
 
 ## Seis módulos con denominación oficial y nivel
 
