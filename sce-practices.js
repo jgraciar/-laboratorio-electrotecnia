@@ -54,7 +54,7 @@ window.SCE_PRACTICES=[
     code:"SCE04",module:"Sistemas y Circuitos Eléctricos 0520",title:"Transformador: relación de transformación y pérdidas",
     file:"transformer.txt",duration:"40–50 min",
     ra:"RA3 · Caracterización de transformadores (fundamentos monofásicos previos al estudio trifásico)",
-    ce:["3a","3h"],
+    ce:["3a"],
     description:"Modelo monofásico previo al estudio de transformadores trifásicos: 60 Hz, fuente de 10 V pico, relación de espiras 1:1, carga 1 kΩ y resistencia primaria de 0,1 Ω. Acoplamiento magnético k = 0,999.",
     objectives:["Distinguir valores pico y eficaces en el primario.","Relacionar la tensión secundaria ideal con la relación de espiras.","Comparar el transformador ideal con su representación acoplada en CircuitJS."],
     tasks:["Localiza ambos devanados, la carga y la resistencia del primario.","Calcula los valores ideales solicitados sin confundirlos con medidas exactas del modelo real.","Visualiza las tensiones primaria y secundaria y comprueba las pequeñas diferencias respecto al caso ideal.","Cambia la resistencia de carga y observa cómo varían las corrientes.","Explica por qué este montaje no acredita por sí solo los grupos de conexión ni los ensayos de un transformador trifásico."],
