@@ -88,3 +88,20 @@ footer a{color:#92ccff}
 .practice-top label{flex:1 1 265px}
 .practice-top label:first-child{flex:1 1 295px}
 .practice-top .toolbtn{align-self:end}
+
+
+/* Fichas curriculares RA y CE · versión 0.5 */
+.practice-curriculum-detail{margin:17px 0 20px;padding:16px;background:#1d3955;border:1px solid #6283a7;border-left:4px solid #94c7ff;border-radius:10px}
+.practice-curriculum-title{color:#e4f3ff;font-size:16px;margin:0 0 15px}
+.practice-ra{padding:12px;background:#12283f;border:1px solid #3b6089;border-radius:8px;margin-bottom:15px}
+.practice-ra-code{display:block;color:#a8d5ff;font-size:12px;letter-spacing:.04em}
+.practice-ra-desc{margin:6px 0 0;color:#e7f0fe;font-weight:650;font-size:14px;line-height:1.5}
+.practice-ce-label{color:#cbe6ff;margin:2px 0 10px;font-size:13px}
+.practice-ce-list{list-style:none;padding:0;margin:0;display:grid;gap:9px}
+.practice-ce-item{display:flex;align-items:flex-start;gap:11px;border:1px solid #395a80;background:#152b43;padding:11px;border-radius:7px}
+.practice-ce-code{flex:0 0 auto;min-width:60px;color:#c1e4ff;font-size:13px}
+.practice-ce-summary{color:#e3edf8;font-size:13px;line-height:1.48}
+.practice-curriculum-limit{color:#c6daef;font-size:12px;line-height:1.55;margin:13px 0 8px}
+.practice-curriculum-warning{margin:14px 0 8px;padding:11px;background:#49351f;color:#ffe4b6;border-left:3px solid #ffd081;border-radius:5px;font-size:12px}
+.practice-source{font-size:13px;color:#9ad3ff;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:430px){.practice-curriculum-detail{padding:11px}.practice-ce-item{flex-direction:column;gap:3px}}
