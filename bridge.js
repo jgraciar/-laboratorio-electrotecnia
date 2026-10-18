@@ -89,7 +89,8 @@
     document.dispatchEvent(new CustomEvent("lab:circuit-ready",{detail:{example:selectedExample}}));
   }
   const examples=new Set([
-    "ohms.txt","voltdivide.txt","capac.txt","fullrect.txt","3phasewye.txt","xor.txt"
+    "ohms.txt","voltdivide.txt","capac.txt","fullrect.txt","3phasewye.txt","xor.txt",
+    "inductac.txt","lrc.txt","transformer.txt","amp-noninvert.txt"
   ]);
   // Navegar a una plantilla del catálogo incluido en CircuitJS reinicia
   // la simulación y los datos medidos; no altera otros circuitos guardados.
