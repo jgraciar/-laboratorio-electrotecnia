@@ -328,7 +328,8 @@
     const practiceNeedsCircuit=window.LabPracticeHasCircuit!==false;
     $("falstad-controls").hidden=mode!=="falstad" && !(mode==="practices" && practiceNeedsCircuit);
     $("practices-controls").hidden=mode!=="practices";
-    $("scope-panel").hidden=mode==="practices" && !practiceNeedsCircuit;
+    $("publications-controls").hidden=mode!=="publications";
+    $("scope-panel").hidden=mode==="publications" || (mode==="practices" && !practiceNeedsCircuit);
     $("trace-mode-label").hidden=mode!=="threephase";
 
     draw();
