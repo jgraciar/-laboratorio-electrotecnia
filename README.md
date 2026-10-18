@@ -4,7 +4,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 **Web publicada desde el repositorio:** https://jgraciar.github.io/-laboratorio-electrotecnia/
 
-**Versión 0.6 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
+**Versión 0.7 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
 
 ## Funciones implementadas
 
@@ -103,9 +103,30 @@ El nombre oficial del módulo 0522 empieza con «Desarrollo de». Denominaciones
 - DR03. Comparación de secciones en red trifásica (RA3)
 - DR04. Ensayos de transformador: balance simplificado de pérdidas (RA6)
 
-Las 12 prácticas nuevas son ejercicios **de cálculo y análisis sobre supuestos teóricos** con autocorrección e informe descargable. No se atribuye falsamente una simulación fotovoltaica, una red física o un centro de transformación real al simulador CircuitJS. Por ello, cuando se abre una de estas fichas, se ocultan los controles de CircuitJS y el osciloscopio, que permanecerán disponibles para las prácticas anteriores con montaje simulable.
+Las 12 prácticas nuevas incluyen **circuitos equivalentes editables en Falstad CircuitJS** además de sus cálculos, autocorrección e informe descargable. Los modelos eléctricos representan fuentes, impedancias, líneas y cargas; **no son** una central fotovoltaica completa, una línea construida ni un centro de transformación con sus celdas y protecciones. Cada ficha explica qué representa su circuito y qué fenómenos quedan fuera. En las prácticas FV, las fuentes DC representan puntos eléctricos ideales, **no curvas I-V reales**; la producción energética, autonomía de baterías y comportamiento MPPT siguen siendo cálculos externos al modelo.
 
 Todas las fichas muestran el RA y los CE relacionados, con descripción didáctica de cada criterio, advertencia de alcance parcial y enlace a la normativa oficial. Los cálculos eléctricos utilizados son simplificaciones explícitas; **no sustituyen las comprobaciones reglamentarias ni las medidas o ensayos sobre instalaciones reales**.
+
+## Todos los ejercicios con circuito Falstad (versión 0.7)
+
+**Regla de diseño:** toda práctica guiada debe incluir un circuito que el alumno pueda abrir y modificar en CircuitJS, además de los cálculos y RA/CE.
+
+Las prácticas iniciales utilizan los ejemplos originales de Falstad. Para los doce ejercicios de distribución, redes y fotovoltaica se han incorporado **modelos eléctricos equivalentes propios**, definidos en `lab-circuits.js` e importados mediante la interfaz oficial `CircuitJS1.importCircuit(text, false)`. Se pueden estudiar tensiones, corrientes y cambios de impedancias en el osciloscopio web.
+
+| Práctica | Modelo de Falstad incluido |
+|---|---|
+| ID01 y DR02 | Transformador equivalente por fase de un CT, con relación 50:1 y carga resistiva |
+| ID02 | Fuente monofásica, resistencias de ida y retorno y carga |
+| ID03 y DR01 | Equivalente monofásico de sistema trifásico equilibrado con línea y carga RL |
+| ID04 | Red radial con dos tramos y cargas de corriente diferente |
+| DR03 | Dos circuitos de BT comparables con secciones equivalentes de 50 y 95 mm² |
+| DR04 | Fuente, pérdidas equivalentes de vacío y pérdidas de carga en resistencias |
+| FV01 | Dos strings en paralelo con tres módulos DC ideales en serie por string |
+| FV02 | Punto nominal DC equivalente a 2,7 kW; energía mediante cálculo HSP/PR |
+| FV03 | Fuente ideal de 48 V y carga; batería sin dinámica de estado de carga |
+| FV04 | Dos strings 2S2P de fuentes DC ideales; sin regulador MPPT dinámico |
+
+En todos estos casos el circuito es una representación del **modelo simplificado**. Ni las cifras de la hoja de cálculo ni la interfaz gráfica sustituyen un proyecto conforme al REBT, los reglamentos de alta tensión, la documentación de fabricante o la ejecución de pruebas reales.
 
 ## Integración con CircuitJS
 
