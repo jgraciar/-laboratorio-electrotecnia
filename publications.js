@@ -30,7 +30,7 @@
       labeled("Módulo:",b.module));
     panel.append(h);
     const note=element("p","publication-note",
-      "Se han identificado "+b.units.length+" unidades y sus secciones de actividades mediante el índice del libro. La extracción de referencias numeradas de ejercicios está en curso, empezando por la Unidad 2.");
+      "Se han identificado "+b.units.length+" unidades y sus secciones de actividades mediante el índice del libro. Hay "+b.numberedActivities.length+" actividades numeradas contrastadas de las unidades 1, 2 y 3; las restantes están pendientes de identificar individualmente.");
     panel.append(note);
     const u=unit();if(!u)return;
     const section=element("section","publication-unit-content");
