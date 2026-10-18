@@ -10,6 +10,8 @@
   <script src="bridge.js" defer></script>
   <script src="sce-practices.js" defer></script>
   <script src="curriculum.js" defer></script>
+  <script src="networks-solar-curriculum.js" defer></script>
+  <script src="networks-solar-practices.js" defer></script>
   <script src="practices.js" defer></script>
 </head>
 <body>
@@ -20,7 +22,7 @@
       <h1>Laboratorio virtual</h1>
       <p class="subtitle">Osciloscopio, generador de funciones y redes trifásicas. Todo desde tu navegador.</p>
     </div>
-    <div class="pill">Versión 0.5 · RA y CE detallados</div>
+    <div class="pill">Versión 0.6 · Cinco módulos de FP</div>
   </div>
 </header>
 <main class="layout">
@@ -59,15 +61,22 @@
   </section>
   <section class="panel" id="practices-controls" hidden>
     <div class="section-heading">
-      <div><h2>Prácticas guiadas · RA y CE</h2><p>Selecciona el módulo y la práctica. Su ficha mostrará el resultado de aprendizaje y los criterios de evaluación relacionados.</p></div>
+      <div><h2>Prácticas guiadas · GM y GS · RA y CE</h2><p>Selecciona un módulo y una práctica. Cada ficha muestra nivel, código, RA, CE y referencia al currículo oficial.</p></div>
     </div>
     <div class="practice-top">
       <label>Módulo de FP
         <select id="practiceModule">
-          <option value="all">Todos los módulos</option>
-          <option value="Electrotecnia 0234">Electrotecnia · 0234 (Grado Medio)</option>
-          <option value="Electrónica 0233">Electrónica · 0233 (Grado Medio)</option>
-          <option value="Sistemas y Circuitos Eléctricos 0520">Sistemas y Circuitos Eléctricos · 0520 (Grado Superior SEA)</option>
+          <option value="all">Todos los módulos (GM y GS)</option>
+          <optgroup label="GRADO MEDIO (GM) · Instalaciones Eléctricas y Automáticas">
+            <option value="Electrotecnia 0234">GM · Electrotecnia (0234)</option>
+            <option value="Electrónica 0233">GM · Electrónica (0233)</option>
+            <option value="Instalaciones de distribución 0236">GM · Instalaciones de distribución (0236)</option>
+            <option value="Instalaciones solares fotovoltaicas 0239">GM · Instalaciones solares fotovoltaicas (0239)</option>
+          </optgroup>
+          <optgroup label="GRADO SUPERIOR (GS) · Sistemas Electrotécnicos y Automatizados">
+            <option value="Sistemas y Circuitos Eléctricos 0520">GS · Sistemas y circuitos eléctricos (0520)</option>
+            <option value="Desarrollo de redes eléctricas y centros de transformación 0522">GS · Desarrollo de redes eléctricas y centros de transformación (0522)</option>
+          </optgroup>
         </select>
       </label>
       <label>Selecciona la práctica
