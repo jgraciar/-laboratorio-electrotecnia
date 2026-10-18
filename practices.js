@@ -76,10 +76,11 @@
         {label:"Salida XOR para A = 1, B = 0",unit:"0 o 1",value:1,tol:0,reason:"Entradas distintas: XOR = 1."},
         {label:"Salida XOR para A = 1, B = 1",unit:"0 o 1",value:0,tol:0,reason:"Entradas iguales: XOR = 0."}
       ]
-    }
+    },
+    ...window.SCE_PRACTICES
   ];
   const $=id=>document.getElementById(id);
-  const content=$("practiceContent"),select=$("practiceSelect"),status=$("practiceStatus");
+  const content=$("practiceContent"),select=$("practiceSelect"),moduleSelect=$("practiceModule"),status=$("practiceStatus");
   if(!content || !select)return;
   let attempts=0,lastResults=[];
   function node(tag,cls,text) {
@@ -105,6 +106,9 @@
     const tag=node("p","practice-meta",p.code+" · "+p.module+" · Duración orientativa: "+p.duration);
     const title=node("h3","practice-title",p.title);
     const desc=node("p","practice-description",p.description);
+    const curriculum=p.ra?node("p","practice-curriculum",
+      "Vinculación curricular orientativa: "+p.ra+
+      (p.ce?.length?" · CE "+p.ce.join(", "):"")):null;
     const subtitle1=node("h4","practice-subtitle","Objetivos");const objectives=list(p.objectives);
     const subtitle2=node("h4","practice-subtitle","Trabajo propuesto");const steps=list(p.tasks);
     const note=node("p","practice-note",
@@ -137,7 +141,9 @@
     solutions.hidden=true;
     p.questions.forEach((q,i)=>solutions.append(node("p","",String(i+1)+". "+q.reason)));
     const summary=node("p","practice-summary");summary.id="practiceSummary";
-    content.append(tag,title,desc,subtitle1,objectives,subtitle2,steps,note,h,fields,buttons,solutions,summary);
+    content.append(tag,title,desc);
+    if(curriculum)content.append(curriculum);
+    content.append(subtitle1,objectives,subtitle2,steps,note,h,fields,buttons,solutions,summary);
     status.textContent="Práctica "+p.code+" preparada. Pulsa «Cargar montaje en CircuitJS».";
   }
   function verify(){
@@ -183,10 +189,20 @@
     setTimeout(()=>URL.revokeObjectURL(url),1000);
     status.textContent="Informe generado en tu navegador; no se han enviado respuestas a ningún servidor.";
   }
-  PRACTICES.forEach(p=>{
-    const option=node("option","",p.code+" · "+p.title);
-    option.value=p.code;select.append(option);
-  });
+  function refreshPracticeOptions() {
+    const selectedModule=moduleSelect?.value||"all";
+    const prior=select.value;
+    const filtered=PRACTICES.filter(p=>selectedModule==="all"||p.module===selectedModule);
+    select.replaceChildren();
+    filtered.forEach(p=>{
+      const option=node("option","",p.code+" · "+p.title);
+      option.value=p.code;select.append(option);
+    });
+    select.value=filtered.some(p=>p.code===prior)?prior:(filtered[0]?.code||"");
+    render();
+  }
+  if(moduleSelect)moduleSelect.addEventListener("change",refreshPracticeOptions);
+  refreshPracticeOptions();
   select.addEventListener("change",render);
   $("practiceReset").addEventListener("click",render);
   $("practiceLoad").addEventListener("click",()=>{
