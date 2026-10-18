@@ -325,9 +325,10 @@
     });
     $("generator-controls").hidden=mode!=="generator";
     $("threephase-controls").hidden=mode!=="threephase";
-    $("falstad-controls").hidden=mode!=="falstad" && mode!=="practices";
+    const practiceNeedsCircuit=window.LabPracticeHasCircuit!==false;
+    $("falstad-controls").hidden=mode!=="falstad" && !(mode==="practices" && practiceNeedsCircuit);
     $("practices-controls").hidden=mode!=="practices";
-    $("scope-panel").hidden=false;
+    $("scope-panel").hidden=mode==="practices" && !practiceNeedsCircuit;
     $("trace-mode-label").hidden=mode!=="threephase";
 
     draw();
