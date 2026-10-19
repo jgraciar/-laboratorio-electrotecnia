@@ -10,6 +10,8 @@ try {
   await page.locator('button[data-mode="falstad"]').click();
   await page.waitForFunction(()=>window.LabCircuit?.isIntegrated?.(),null,{timeout:180000});
   await page.waitForFunction(()=>document.querySelector("#circuit-frame")?.contentWindow?.CircuitJS1,null,{timeout:180000});
+  // La instancia JS puede existir antes de que termine la carga del circuito inicial.
+  await page.waitForFunction(()=>{const s=document.querySelector("#circuit-frame")?.contentWindow?.CircuitJS1;return s?.getTime?.()>0.02;},null,{timeout:45000});
   for(const ref of [
     {unit:2,kind:"resuelta",number:1},
     {unit:2,kind:"resuelta",number:2}
