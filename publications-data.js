@@ -1,5 +1,6 @@
 "use strict";
-// Referencias del ejemplar consultado, sin enunciados protegidos.
+// Metadatos de la publicación y estructura por unidades y páginas.
+// No se reproducen enunciados, ilustraciones ni soluciones.
 window.LabPublications = [
   {
     "id": "paraninfo-electrotecnia-2022",
@@ -10,8 +11,8 @@ window.LabPublications = [
     "isbn": "978-84-1366-155-1",
     "cycle": "Grado Medio · Instalaciones Eléctricas y Automáticas",
     "module": "Electrotecnia · 0234",
-    "source": "Índice y actividades identificados en el ejemplar facilitado por el docente; páginas impresas, no páginas del visor PDF.",
-    "status": "Índice completo de 21 unidades. Primera identificación individual de prácticas y actividades en las unidades 1, 2 y 3.",
+    "source": "Índice completo y referencias numeradas contrastados con el PDF de Paraninfo, 7.ª edición, 2022. Páginas impresas, no números del visor PDF.",
+    "status": "Catálogo bibliográfico completo, 21 unidades; los datos individualizados se amplían desde paraninfo-activities.js.",
     "printedToPdfOffset": 26,
     "units": [
       {
@@ -201,7 +202,24 @@ window.LabPublications = [
         "number": 9,
         "title": "Los condensadores",
         "start": 129,
-        "sections": [],
+        "sections": [
+          {
+            "type": "Comprobación práctica en laboratorio",
+            "page": 140
+          },
+          {
+            "type": "Actividades de comprobación",
+            "page": 141
+          },
+          {
+            "type": "Actividades de evaluación resueltas",
+            "page": 142
+          },
+          {
+            "type": "Actividades de ampliación",
+            "page": 143
+          }
+        ],
         "practiceCodes": [
           "E03"
         ]
