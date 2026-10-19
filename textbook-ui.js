@@ -36,6 +36,9 @@
       "ADVERTENCIA",
       x.warning,
       "Modelo: "+x.scope,
+      "Currículo (vinculación parcial): "+(window.LabTextbookCurriculum?.[x.unit]?.ra||"Sin vinculación verificada")+
+        " · CE "+(window.LabTextbookCurriculum?.[x.unit]?.ce.join(", ")||"sin asignación"),
+      "BOE: "+(window.LabTextbookCurriculumSource||""),
       "",
       "CÁLCULOS",
       ...x.questions.flatMap((q,i)=>[
@@ -87,6 +90,17 @@
       "Grado Medio · Electrotecnia (0234) · Unidad "+x.unit+" · Ref. "+x.reference+
       " · pág. impresa "+x.bookPage));
     root.append(create("p","practice-note",x.warning));
+    const relation=window.LabTextbookCurriculum?.[x.unit];
+    if(relation) {
+      const line=create("p","practice-curriculum",
+        "Vinculación curricular parcial: "+relation.ra+
+        (relation.ce.length?" · CE "+relation.ce.join(", "):" · CE específicos no acreditados con este modelo.")+
+        ". Este ejercicio no demuestra el cumplimiento completo de los criterios.");
+      root.append(line);
+      const link=create("a","practice-source","Consultar el RA/CE completo en el BOE ↗");
+      link.href=window.LabTextbookCurriculumSource;
+      link.target="_blank";link.rel="noopener noreferrer";root.append(link);
+    }
     root.append(create("h4","practice-subtitle","Modelo equivalente de Falstad"));
     root.append(create("p","",x.scope));
     const actions=create("div","practice-actions");
