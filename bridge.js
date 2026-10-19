@@ -142,14 +142,30 @@
       return {ok:false,message:"Identificador de ejercicio no válido."};
     }
     if(typeof dump!=="string" || dump.length>30000 || !dump.startsWith("$ ") ||
-       !dump.split("\n").slice(1).every(line=>line==="" || /^(?:v|r|l|c|w|g|T|x) /.test(line))){
+       !dump.split("\n").slice(1).every(line=>line==="" || /^(?:v|r|l|c|w|g|T|x|p|370|420) /.test(line))){
       return {ok:false,message:"Formato de circuito no válido."};
     }
     return importModel(id,dump);
   }
+  // Lectura en vivo de instrumentos nativos de CircuitJS. No implica
+  // validación de resultados hasta disponer de suficientes pasos de simulación.
+  function getInstrumentReadings(){
+    if(!sim || !selectedExample || !/^PN-/.test(selectedExample))return null;
+    let elements,time;
+    try{elements=Array.from(sim.getElements()||[]);time=sim.getTime();}catch(_){return null;}
+    if(!Number.isFinite(time))return null;
+    const get=type=>elements.find(el=>{try{return el.getType()===type;}catch(_){return false;}});
+    const ammeter=get("AmmeterElm"),voltmeter=get("ProbeElm");
+    let current=NaN,voltage=NaN;
+    try{if(ammeter)current=ammeter.getCurrent();}catch(_){}
+    try{if(voltmeter)voltage=voltmeter.getVoltageDiff();}catch(_){}
+    return {id:selectedExample,time,current,voltage,
+      hasAmmeter:!!ammeter,hasVoltmeter:!!voltmeter};
+  }
   window.LabCircuit={
     loadExample,
     loadExerciseCircuit,
+    getInstrumentReadings,
     isIntegrated:()=>localAvailable,
     currentExample:()=>selectedExample
   };
