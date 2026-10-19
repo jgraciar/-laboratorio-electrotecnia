@@ -60,6 +60,12 @@
       const pdf=element("small","","Página del PDF del docente: "+(act.page+b.printedToPdfOffset));
       const label=element("p","",act.theme);
       card.append(head,label,pdf);
+      if(window.LabTextbookUI?.open){
+        const own=element("button","toolbtn","Ejercicio original + Falstad");
+        own.type="button";
+        own.addEventListener("click",()=>window.LabTextbookUI.open(act));
+        card.append(own);
+      }
       if(act.practiceCode){
         const button=element("button","toolbtn","Abrir práctica relacionada ("+act.practiceCode+")");
         button.type="button";button.addEventListener("click",()=>openPractice(act.practiceCode));
@@ -87,7 +93,7 @@
     panel.append(header);
     panel.append(element("p","publication-note",
       b.units.length+" unidades · "+
-      b.numberedActivities.length+" referencias numeradas localizadas en el ejemplar. "+
+      b.numberedActivities.length+" referencias localizadas en el ejemplar, con ejercicios originales generables. "+
       "Se muestran tipos, códigos y páginas para consultar cada actividad en el libro; los esquemas y enunciados no se reproducen."));
     const u=unit();if(!u)return;
     const section=element("section","publication-unit-content");
@@ -130,6 +136,7 @@
     showActivities();
   }
   function repopulateUnits(){
+    window.LabTextbookUI?.close();
     const b=book();unitSelect.replaceChildren();
     if(!b){panel.replaceChildren();return;}
     b.units.forEach(u=>{
@@ -148,7 +155,7 @@
   });
   select.value=books[0]?.id||"";
   select.addEventListener("change",repopulateUnits);
-  unitSelect.addEventListener("change",()=>{visibleLimit=30;render();});
+  unitSelect.addEventListener("change",()=>{window.LabTextbookUI?.close();visibleLimit=30;render();});
   typeSelect?.addEventListener("change",()=>{visibleLimit=30;showActivities();});
   search?.addEventListener("input",()=>{visibleLimit=30;showActivities();});
   window.LabPublicationsUI={
