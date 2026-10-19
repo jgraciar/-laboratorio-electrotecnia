@@ -4,7 +4,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 **Web publicada desde el repositorio:** https://jgraciar.github.io/-laboratorio-electrotecnia/
 
-**Versión 0.9 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
+**Versión 1.0 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
 
 ## Funciones implementadas
 
@@ -88,6 +88,19 @@ El catálogo permite:
 La información se obtuvo mediante análisis de las páginas del ejemplar. Se corrigieron desajustes de reconocimiento de texto en varias referencias y se incorporaron las secciones de la Unidad 9. La base está en \`paraninfo-activities.js\` (inventario compacto de páginas y numeración), \`publications-data.js\` (edición y unidades), y \`publications.js\` (interfaz).
 
 **Alcance:** el catálogo identifica números, tipos, temas y páginas de los ejercicios; no equivale a reproducir o resolver las 571 actividades del libro. La vinculación individual con Falstad solo aparece cuando hay una práctica apropiada. Las 24 prácticas propias del laboratorio siguen disponibles independientemente. La bibliografía no contiene enunciados, gráficos, el libro PDF ni su solucionario, sujetos a derechos de autor.
+
+## Ejercicios propios con Falstad para el catálogo Paraninfo (v1.0)
+
+La pestaña **Publicaciones** contiene referencias bibliográficas al manual de *Electrotecnia* de Paraninfo. Para cada una de las **755 referencias catalogadas**, el botón **Ejercicio original + Falstad** abre una variante original y diferenciada por valores del tema, con:
+
+- Un circuito eléctrico editable que se carga automáticamente en CircuitJS integrado (y botón para restaurarlo).
+- Dos cálculos con valores numéricos definidos, autocorrección y explicación matemática.
+- Procedimiento de simulación y medidas con el osciloscopio virtual.
+- Informe individual TXT y vinculación curricular parcial al RD 177/2008, con enlace al BOE.
+
+**Alcance fundamental:** la relación es **temática**, NO una resolución del ejercicio original del libro ni una reproducción de su esquema. Para generar las 755 variantes se usan **21 familias de modelos eléctricos** (una por unidad), con parámetros derivados de la referencia. No existen 755 esquemas conceptualmente distintos, ni están validadas 755 correspondencias exactas con los enunciados editoriales. Los ejemplos sobre magnetismo, máquinas, lámparas, seguridad o sistemas trifásicos son **equivalentes limitados** y señalan expresamente qué fenómenos NO reproducen. El alumno no debe emplear una simulación eléctrica como ensayo real o verificación reglamentaria.
+
+El banco seguirá requiriendo estudio individual de cada enunciado para transformarlo, cuando resulte técnicamente posible, en una **solución fiel y una simulación específica**. Los documentos, soluciones e ilustraciones de Paraninfo no se publican.
 
 ## Seis módulos con denominación oficial y nivel
 
