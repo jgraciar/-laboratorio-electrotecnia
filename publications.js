@@ -10,7 +10,7 @@
   let visibleLimit=30;
   const typeNames={
     practica:"Prácticas de laboratorio",comprobacion:"Comprobación",
-    evaluacion:"Evaluación resuelta",propuesta:"Actividad propuesta",
+    evaluacion:"Evaluación resuelta",resuelta:"Actividad resuelta",propuesta:"Actividad propuesta",
     ampliacion:"Ampliación",experimental:"Actividad experimental"
   };
   const element=(tag,cls,text)=>{
