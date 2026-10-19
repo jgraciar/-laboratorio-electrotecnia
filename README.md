@@ -75,7 +75,7 @@ La versión 0.9 completa el **catálogo de referencias numeradas de las 21 unida
 - **ISBN:** 978-84-1366-155-1.
 - **Módulo:** GM, Electrotecnia 0234 (Instalaciones Eléctricas y Automáticas).
 
-**Referencias bibliográficas individualizadas: 571**, distribuidas en 71 prácticas de laboratorio, 330 actividades de comprobación, 98 evaluaciones resueltas, 36 propuestas, 28 de ampliación y 8 experimentales.
+**Referencias bibliográficas localizadas: 755**, distribuidas en 184 actividades resueltas integradas en los capítulos, 71 prácticas de laboratorio, 330 actividades de comprobación, 98 evaluaciones resueltas, 36 propuestas, 28 de ampliación y 8 experimentales.
 
 El catálogo permite:
 
