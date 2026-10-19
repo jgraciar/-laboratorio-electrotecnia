@@ -33,9 +33,18 @@ for(const [unit,number,expected,elec] of cases){
     const V=parts.find(s=>s.startsWith("v ")).split(" ");
     assert(Math.abs(Number(R[6])-elec[1])<1e-8);
     assert(Math.abs(Number(V[8])-elec[0])<1e-8);
-    assert(parts.some(s=>s.startsWith("370 ")));
-    assert(parts.some(s=>s.startsWith("p ")));
-    assert(parts.some(s=>s.startsWith("420 ")));
+    const ammeter=parts.find(s=>s.startsWith("370 ")).split(" ");
+    const voltmeter=parts.find(s=>s.startsWith("p ")).split(" ");
+    const wattmeter=parts.find(s=>s.startsWith("420 ")).split(" ");
+    assert(ammeter.length>=8 && voltmeter.length>=10 && wattmeter.length>=9);
+    // Comprobar escala explícita contra corriente y tensión del ejercicio.
+    const expectedIScale=Math.abs(elec[0]/elec[1])>=1?1:Math.abs(elec[0]/elec[1])>=.001?2:3;
+    const expectedVScale=Math.abs(elec[0])>=1?1:Math.abs(elec[0])>=.001?2:3;
+    assert.equal(Number(ammeter[7]),expectedIScale,"Escala amperímetro");
+    assert.equal(Number(voltmeter[7]),expectedVScale,"Escala voltímetro");
+    assert.equal(x.meterScales.current,expectedIScale===1?"A":expectedIScale===2?"mA":"µA");
+    assert.equal(x.meterScales.voltage,expectedVScale===1?"V":expectedVScale===2?"mV":"µV");
+    assert.equal(x.meterScales.power,elec[0]**2/elec[1]>=1000?"kW":"W");
     assert(Math.abs(x.measured[0].value-elec[0]/elec[1])<1e-8);
     assert(Math.abs(x.measured[2].value-elec[0]*elec[0]/elec[1])<1e-8);
   }else assert.equal(x.circuit,null);

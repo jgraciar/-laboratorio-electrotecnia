@@ -231,3 +231,14 @@ El solucionario de la AR 3.9 tiene una errata: 8 h son 28.800 s, no 28.000 s.
 Los resultados nuevos se marcarán como comprobados únicamente si GitHub Actions
 confirma esa segunda verificación. No se incorporan actividades sin cotejar su
 enunciado y solución original.
+
+
+### Escalas de los instrumentos por actividad
+
+La generación de circuitos de Paraninfo fija expresamente la escala del amperímetro
+(A, mA o µA) y del voltímetro (V, mV o µV) según los valores calculados para
+cada ejercicio. El vatímetro de CircuitJS adapta automáticamente su lectura W/kW.
+La comparación numérica de la web presenta las mismas unidades y conserva el
+cálculo físico en amperios, voltios y vatios. No se aplica ninguna escala ficticia
+a los valores eléctricos. Las pruebas unitarias comprueban los campos de escala
+del archivo de circuito y GitHub Actions verifica las medidas del simulador.

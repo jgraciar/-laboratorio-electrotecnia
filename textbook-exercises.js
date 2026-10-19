@@ -7,23 +7,39 @@
   "use strict";
   const HEADER="$ 1 0.000005 10 60 5.0 50";
   const decimal=x=>Number(x).toPrecision(12);
+  // Opciones reales de los aparatos CircuitJS: 0=automática, 1=A/V,
+  // 2=mA/mV, 3=µA/µV. Estas opciones afectan solo a la presentación,
+  // nunca a la magnitud que mide el instrumento.
+  function meterScale(value){
+    const abs=Math.abs(value);
+    return abs>=1 ? 1 : abs>=0.001 ? 2 : 3;
+  }
+  function meterUnit(value,kind){
+    const scale=meterScale(value);
+    const base=kind==="current"?"A":"V";
+    return (scale===1?"":scale===2?"m":"µ")+base;
+  }
   function circuit({v,r,watt=false}){
     // Modelo equivalente resistivo en CC. Para consumidores en CA puramente
     // resistivos, reproduce los valores eficaces U/I y la potencia media,
     // NO la variación instantánea sinusoidal.
+    const currentScale=meterScale(v/r);
+    const voltageScale=meterScale(v);
     const top=["v 96 352 96 96 0 0 40 "+decimal(v)+" 0",
-      "w 96 96 144 96 0","370 144 96 208 96 3 0 0"];
+      "w 96 96 144 96 0",
+      "370 144 96 208 96 3 0 "+currentScale];
     if(watt){
       top.push("w 208 96 272 96 0","420 272 96 368 96 0 80 1",
         "g 272 16 272 -8 0","w 368 96 400 96 0",
         "r 400 96 400 352 0 "+decimal(r),
         "w 400 352 96 352 0","w 400 96 528 96 0",
-        "p 528 96 528 352 3 0 0 0",
+        "p 528 96 528 352 3 0 "+voltageScale+" 0",
         "w 528 352 400 352 0");
     }else{
       top.push("w 208 96 384 96 0","r 384 96 384 352 0 "+decimal(r),
         "w 384 352 96 352 0","w 384 96 528 96 0",
-        "p 528 96 528 352 3 0 0 0","w 528 352 384 352 0");
+        "p 528 96 528 352 3 0 "+voltageScale+" 0",
+        "w 528 352 384 352 0");
     }
     top.push("g 96 352 96 376 0");
     return [HEADER,...top].join("\n")+"\n";
@@ -44,6 +60,11 @@
     notes:config.notes||""
   });
   const load=(u,r)=>({circuit:circuit({v:u,r,watt:true}),
+    meterScales:{
+      current:meterUnit(u/r,"current"),
+      voltage:meterUnit(u,"voltage"),
+      power:Math.abs(u*u/r)>=1000?"kW":"W"
+    },
     measured:[
       {label:"Amperímetro A1",type:"current",value:u/r,unit:"A"},
       {label:"Voltímetro V1",type:"voltage",value:u,unit:"V"},

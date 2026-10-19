@@ -96,6 +96,13 @@
     root.append(create("h4","practice-subtitle","Enunciado original del libro"));
     root.append(create("p","practice-statement",x.statement));
     root.append(create("p","practice-note",x.warning));
+    if(x.meterScales){
+      root.append(create("p","practice-note",
+        "Escalas de los instrumentos: A1 en "+x.meterScales.current+
+        "; V1 en "+x.meterScales.voltage+
+        "; W1 en "+x.meterScales.power+
+        " (selección automática de W/kW de CircuitJS)."));
+    }
     if(x.notes)root.append(create("p","practice-note",x.notes));
     const relation=window.LabTextbookCurriculum?.[x.unit];
     if(relation) {
@@ -146,6 +153,16 @@
         "El contador usa exclusivamente la potencia y duración que proporciona el enunciado; no es una lectura de Falstad."));
     }
     if(Number.isFinite(x.powerGiven))showEnergy(x.powerGiven);
+    function instrumentText(value,type){
+      // Mostrar también en la comprobación las mismas unidades que en
+      // los instrumentos del esquema: mA/A, mV/V, W/kW.
+      const scale=x.meterScales?.[type];
+      if(!scale)return fmt(value);
+      const factor=scale==="mA"||scale==="mV"?1000:
+        scale==="µA"||scale==="µV"?1000000:
+        scale==="kW"?0.001:1;
+      return fmt(value*factor)+" "+scale;
+    }
     function compareMeters(){
       const reading=window.LabCircuit?.getInstrumentReadings?.();
       if(!reading || reading.id!==x.id){
@@ -162,9 +179,9 @@
         const ok=diff<=tolerance;
         pass=pass && ok;compared++;
         meterDetails.append(create("p","",
-          m.label+": lectura Falstad "+fmt(actual)+" "+m.unit+
-          " · cálculo "+fmt(m.value)+" "+m.unit+
-          " · error "+fmt(diff)+" "+m.unit+
+          m.label+": lectura Falstad "+instrumentText(actual,m.type)+
+          " · cálculo "+instrumentText(m.value,m.type)+
+          " · error "+instrumentText(diff,m.type)+
           (ok?" (dentro de tolerancia)":" (no coincide)")));
       }
       meterResult.textContent=compared===(x.measured||[]).length && pass?
