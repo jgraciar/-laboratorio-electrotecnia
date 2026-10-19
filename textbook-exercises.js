@@ -52,6 +52,7 @@
     pdfPage:page(config.page),title:"Actividad resuelta "+unit+"."+number+" · "+title,
     statement,questions,
     circuit:config.circuit||null,
+    meterScales:config.meterScales||null,
     measured:config.measured||[],
     scope:config.scope||"Sin circuito eléctrico único en el enunciado: se mantienen los datos del libro sin inventar tensión, corriente ni resistencia.",
     energyHours:config.energyHours??null,
