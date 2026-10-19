@@ -139,3 +139,14 @@ footer a{color:#92ccff}
 .publication-numbered-item small{margin-top:auto}
 #publicationActivityResults>.toolbtn{display:block;margin:16px auto 5px}
 @media(max-width:750px){.publication-filters{grid-template-columns:1fr}}
+
+/* Ejercicios propios de las referencias bibliográficas */
+.textbook-exercise-panel{margin:22px 0 18px;padding:18px;border:1px solid #547ba5;border-left:4px solid #95c9ff;background:#182f48;border-radius:11px}
+.textbook-exercise-panel h3{font-size:20px;color:#eff7ff;margin:0 0 8px}
+.textbook-exercise-panel > p:not(.practice-meta){font-size:13px;line-height:1.6}
+.textbook-exercise-panel .practice-note{background:#27415e}
+.textbook-exercise-panel .practice-questions{margin-top:13px}
+.textbook-exercise-panel .practice-solutions{margin-top:10px}
+.publication-numbered-item>.toolbtn{width:100%;text-align:center}
+.publication-numbered-item>.toolbtn:first-of-type{background:#2e5478}
+@media(max-width:650px){.textbook-exercise-panel{padding:11px}}
