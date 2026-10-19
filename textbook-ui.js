@@ -29,9 +29,10 @@
     const x=current;
     const lines=[
       "LABORATORIO VIRTUAL · ELECTROTECNIA GM 0234",
-      "EJERCICIO PROPIO VINCULADO TEMÁTICAMENTE A PARANINFO",
+      "ACTIVIDAD ORIGINAL DE PARANINFO · REPRODUCCIÓN AUTORIZADA POR EL DOCENTE",
       "Referencia bibliográfica: "+x.reference+" · página impresa "+x.bookPage,
       "Unidad "+x.unit+" · "+x.title,
+      "ENUNCIADO ORIGINAL: "+x.statement,
       "",
       "ADVERTENCIA",
       x.warning,
@@ -84,11 +85,14 @@
     try{x=lab.build(ref);}catch(e){
       root.hidden=false;root.textContent="Error al preparar el ejercicio: "+e.message;return false;
     }
+    if(!x){root.hidden=true;root.replaceChildren();return false;}
     current=x;tries=0;root.hidden=false;root.replaceChildren();
     root.append(create("h3","",x.title));
     root.append(create("p","practice-meta",
       "Grado Medio · Electrotecnia (0234) · Unidad "+x.unit+" · Ref. "+x.reference+
       " · pág. impresa "+x.bookPage));
+    root.append(create("h4","practice-subtitle","Enunciado original del libro"));
+    root.append(create("p","practice-statement",x.statement));
     root.append(create("p","practice-note",x.warning));
     const relation=window.LabTextbookCurriculum?.[x.unit];
     if(relation) {
@@ -101,7 +105,7 @@
       link.href=window.LabTextbookCurriculumSource;
       link.target="_blank";link.rel="noopener noreferrer";root.append(link);
     }
-    root.append(create("h4","practice-subtitle","Modelo equivalente de Falstad"));
+    root.append(create("h4","practice-subtitle","Circuito para verificar el enunciado en Falstad"));
     root.append(create("p","",x.scope));
     const actions=create("div","practice-actions");
     const status=create("p","hint","Preparando circuito Falstad integrado…");
@@ -112,14 +116,41 @@
         (result?.message||"CircuitJS no está conectado todavía.");
     }
     actions.append(button("Reiniciar circuito Falstad",load));
+    const meterResult=create("p","practice-summary","Sin comparación instrumental de Falstad.");
+    const meterDetails=create("div","practice-meter-details");
+    function compareMeters(){
+      const reading=window.LabCircuit?.getInstrumentReadings?.();
+      if(!reading || reading.id!==x.id){
+        meterResult.textContent="Falstad aún no ha adquirido las lecturas de este ejercicio.";return;
+      }
+      meterDetails.replaceChildren();
+      let pass=reading.time>=0.002,compared=0;
+      for(const m of x.measured||[]){
+        const actual=m.type==="current"?reading.current:reading.voltage;
+        if(!Number.isFinite(actual)){pass=false;continue;}
+        const diff=Math.abs(actual-m.value);
+        const tolerance=Math.max(0.0001,Math.abs(m.value)*0.005);
+        const ok=diff<=tolerance;
+        pass=pass && ok;compared++;
+        meterDetails.append(create("p","",
+          m.label+": lectura Falstad "+fmt(actual)+" "+m.unit+
+          " · cálculo "+fmt(m.value)+" "+m.unit+
+          " · error "+fmt(diff)+" "+m.unit+
+          (ok?" (dentro de tolerancia)":" (no coincide)")));
+      }
+      meterResult.textContent=compared===(x.measured||[]).length && pass?
+        "Contraste instrumental satisfactorio para esta ejecución (tolerancia 0,5 %; t ≥ 2 ms).":
+        "Resultado pendiente: revisa conexión, estabilización y lecturas en Falstad.";
+    }
+    actions.append(button("Comparar lecturas reales de Falstad",compareMeters));
     actions.append(button("Descargar informe TXT",report));
     actions.append(button("Cerrar ejercicio",close));
-    root.append(actions,status);
+    root.append(actions,status,meterResult,meterDetails);
     root.append(create("h4","practice-subtitle","Procedimiento"));
     const steps=create("ol","practice-steps");
     x.steps.forEach(step=>steps.append(create("li","",step)));
     root.append(steps);
-    root.append(create("h4","practice-subtitle","Cálculos del ejercicio propio"));
+    root.append(create("h4","practice-subtitle","Cálculos del ejercicio original"));
     const form=create("div","practice-questions");
     x.questions.forEach((q,i)=>{
       const card=create("div","practice-question");

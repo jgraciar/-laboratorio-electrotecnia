@@ -43,12 +43,15 @@
     if(!b||!u)return;
     const filter=typeSelect?.value||"all";
     const term=normalize(search?.value).trim();
-    const all=b.numberedActivities.filter(a=>a.unit===u.number);
+    // Solo ejercicios originales ya transcritos; no hay generación paramétrica.
+    const all=b.numberedActivities.filter(a=>a.unit===u.number &&
+      window.LabTextbookExercises?.has?.(a));
     const matches=all.filter(a=>
       (filter==="all"||a.kind===filter) &&
-      (!term||normalize([a.id,a.theme,a.kind,a.page].join(" ")).includes(term)));
-    summary.textContent=matches.length+" referencias de "+all.length+
-      " en esta unidad · "+b.numberedActivities.length+" en todo el libro.";
+      (!term||normalize([a.id,a.theme,a.kind,a.page,
+        window.LabTextbookExercises.build(a)?.statement].join(" ")).includes(term)));
+    summary.textContent=matches.length+" actividades originales disponibles en esta unidad."+
+      " El resto solo se incorporará tras resolver y contrastar los ejercicios.";
     if(!matches.length){
       root.append(element("p","publication-muted","No hay referencias que coincidan con estos filtros."));
       return;
@@ -58,18 +61,13 @@
       const card=element("div","publication-numbered-item");
       const head=element("strong","",act.id+" · p. impresa "+act.page);
       const pdf=element("small","","Página del PDF del docente: "+(act.page+b.printedToPdfOffset));
-      const label=element("p","",act.theme);
+      const label=element("p","",window.LabTextbookExercises.build(act)?.statement||act.theme);
       card.append(head,label,pdf);
       if(window.LabTextbookUI?.open){
-        const own=element("button","toolbtn","Ejercicio original + Falstad");
+        const own=element("button","toolbtn","Abrir actividad original y circuito");
         own.type="button";
         own.addEventListener("click",()=>window.LabTextbookUI.open(act));
         card.append(own);
-      }
-      if(act.practiceCode){
-        const button=element("button","toolbtn","Abrir práctica relacionada ("+act.practiceCode+")");
-        button.type="button";button.addEventListener("click",()=>openPractice(act.practiceCode));
-        card.append(button);
       }
       list.append(card);
     }
@@ -92,46 +90,17 @@
       labeled("Nivel y ciclo:",b.cycle),labeled("Módulo:",b.module));
     panel.append(header);
     panel.append(element("p","publication-note",
-      b.units.length+" unidades · "+
-      b.numberedActivities.length+" referencias localizadas en el ejemplar, con ejercicios originales generables. "+
-      "Se muestran tipos, códigos y páginas para consultar cada actividad en el libro; los esquemas y enunciados no se reproducen."));
+      "Únicamente se muestran actividades originales del libro. Los ejercicios "+
+      "parametrizados y las prácticas similares no se ofrecen en esta sección."));
     const u=unit();if(!u)return;
     const section=element("section","publication-unit-content");
     section.append(element("h4","","Unidad "+u.number+" · "+u.title));
     section.append(labeled("Inicio:", "página impresa "+u.start+
       " · página PDF "+(u.start+b.printedToPdfOffset)));
-    section.append(element("h5","","Secciones de actividades de la publicación"));
-    if(!u.sections.length){
-      section.append(element("p","publication-muted",
-        "Consulta las referencias numeradas de esta unidad: se han identificado directamente sobre las páginas del libro."));
-    }else{
-      const ul=element("ul","publication-activity-list");
-      u.sections.forEach(sec=>{
-        const li=element("li","publication-activity");
-        li.append(element("strong","",sec.type),
-          element("span","","p. impresa "+sec.page+" · p. PDF "+(sec.page+b.printedToPdfOffset)));
-        ul.append(li);
-      });section.append(ul);
-    }
-    section.append(element("h5","","Actividades y ejercicios numerados"));
+    section.append(element("h5","","Actividades originales del libro"));
     const count=element("p","publication-activity-count");count.id="publicationActivityCount";
     const results=element("div","");results.id="publicationActivityResults";
     section.append(count,results);
-    section.append(element("h5","","Circuitos Falstad y prácticas vinculadas por contenido"));
-    if(!u.practiceCodes.length){
-      section.append(element("p","publication-muted",
-        "Sin práctica Falstad vinculada a esta unidad por el momento. "+
-        "Las referencias del libro están catalogadas, pero no se atribuye una simulación inexistente."));
-    }else{
-      const actions=element("div","publication-linked");
-      u.practiceCodes.forEach(code=>{
-        const button=element("button","toolbtn","Abrir "+code);
-        button.type="button";button.addEventListener("click",()=>openPractice(code));
-        actions.append(button);
-      });section.append(actions);
-      section.append(element("p","publication-muted",
-        "Las simulaciones trabajan contenidos relacionados, pero no son copias exactas ni soluciones de los ejercicios originales."));
-    }
     panel.append(section);
     showActivities();
   }
@@ -139,11 +108,12 @@
     window.LabTextbookUI?.close();
     const b=book();unitSelect.replaceChildren();
     if(!b){panel.replaceChildren();return;}
-    b.units.forEach(u=>{
+    b.units.filter(u=>b.numberedActivities.some(a=>
+      a.unit===u.number && window.LabTextbookExercises?.has?.(a))).forEach(u=>{
       const opt=element("option","",String(u.number).padStart(2,"0")+" · "+u.title);
       opt.value=String(u.number);unitSelect.append(opt);
     });
-    unitSelect.value=String(b.units[0]?.number||"");
+    unitSelect.value=String(unitSelect.options[0]?.value||"");
     visibleLimit=30;
     if(typeSelect)typeSelect.value="all";
     if(search)search.value="";
