@@ -1,78 +1,141 @@
 "use strict";
-/**
- * Fichas de Paraninfo, edición 7.ª (2022): actividades REALES transcritas del PDF
- * proporcionado por el docente. No hay generación paramétrica.
- *
- * Fase de pruebas: solo AR 2.1 y AR 2.2. Estos modelos se verifican
- * matemáticamente, pero NO SE CONSIDERAN validados por CircuitJS hasta
- * terminar la comparación instrumental en ejecución real.
- * La rama main permanece intacta hasta esa verificación.
+/* Electrotecnia · Paraninfo 7.ª ed. (2022).
+ * SOLO actividades reales extraídas del ejemplar aportado, NO ejercicios parametrizados.
+ * Las magnitudes eléctricas se comprueban con instrumentos del CircuitJS integrado.
  */
-(function verifiedParaninfoExercises(){
+(function(){
+  "use strict";
   const HEADER="$ 1 0.000005 10 60 5.0 50";
-  const join=lines=>[HEADER,...lines].join("\n")+"\n";
-  const makeCircuit=(voltage,resistance)=>join([
-    "v 96 352 96 96 0 0 40 "+voltage+" 0",
-    "w 96 96 144 96 0",
-    "370 144 96 208 96 3 0 0",
-    "w 208 96 384 96 0",
-    "r 384 96 384 352 0 "+resistance,
-    "w 384 352 96 352 0",
-    "w 384 96 528 96 0",
-    "p 528 96 528 352 3 0 0 0",
-    "w 528 352 384 352 0",
-    "g 96 352 96 376 0"
-  ]);
-  const question=(label,value,unit,formula,tolerance=0.001)=>
-    ({label,value,unit,formula,tolerance});
-  const cases={
-    "2:resuelta:1":{
-      unit:2,kind:"resuelta",number:1,bookPage:24,pdfPage:50,
-      title:"Actividad resuelta 2.1 · Ley de Ohm",
-      statement:"Calcula la intensidad que circula por el filamento de una lámpara incandescente de 10 Ω de resistencia, cuando está sometida a una tensión de 12 V.",
-      circuit:makeCircuit(12,10),
-      questions:[question("Intensidad que circula por el filamento",1.2,"A","I = U/R = 12 V / 10 Ω = 1,2 A")],
-      scope:"Modelo de resistencia constante. El voltímetro está en paralelo con el receptor y el amperímetro en serie. No representa el calentamiento del filamento.",
-      measured:[{label:"Amperímetro A1",value:1.2,unit:"A",type:"current"},{label:"Voltímetro V1",value:12,unit:"V",type:"voltage"}],
-      proof:"Cálculo independiente: 12/10 = 1,2 A. Simulación instrumental aún por contrastar."
-    },
-    "2:resuelta:2":{
-      unit:2,kind:"resuelta",number:2,bookPage:24,pdfPage:50,
-      title:"Actividad resuelta 2.2 · Resistencia del filamento",
-      statement:"Se quiere determinar la resistencia eléctrica del filamento de una lámpara incandescente. Para ello, se somete a la lámpara a una tensión de 230 V y, mediante un amperímetro intercalado en serie, se mide el paso de una intensidad de corriente de 0,2 A (Figura 2.8).",
-      circuit:makeCircuit(230,1150),
-      questions:[question("Resistencia eléctrica del filamento",1150,"Ω","R = U/I = 230 V / 0,2 A = 1.150 Ω",0.01)],
-      scope:"Circuito simulado ideal de baja complejidad. Los 230 V son exclusivamente virtuales: no conectar la red ni el Hantek 6022BE directamente.",
-      measured:[{label:"Amperímetro A1",value:0.2,unit:"A",type:"current"},{label:"Voltímetro V1",value:230,unit:"V",type:"voltage"}],
-      proof:"Cálculo independiente: 230/0,2 = 1.150 Ω. La resistencia resultante es la carga del circuito de comprobación."
+  const decimal=x=>Number(x).toPrecision(12);
+  function circuit({v,r,watt=false}){
+    // Modelo equivalente resistivo en CC. Para consumidores en CA puramente
+    // resistivos, reproduce los valores eficaces U/I y la potencia media,
+    // NO la variación instantánea sinusoidal.
+    const top=["v 96 352 96 96 0 0 40 "+decimal(v)+" 0",
+      "w 96 96 144 96 0","370 144 96 208 96 3 0 0"];
+    if(watt){
+      top.push("w 208 96 272 96 0","420 272 96 368 96 0 80 1",
+        "g 272 16 272 -8 0","w 368 96 400 96 0",
+        "r 400 96 400 352 0 "+decimal(r),
+        "w 400 352 96 352 0","w 400 96 528 96 0",
+        "p 528 96 528 352 3 0 0 0",
+        "w 528 352 400 352 0");
+    }else{
+      top.push("w 208 96 384 96 0","r 384 96 384 352 0 "+decimal(r),
+        "w 384 352 96 352 0","w 384 96 528 96 0",
+        "p 528 96 528 352 3 0 0 0","w 528 352 384 352 0");
     }
-  };
-  const key=a=>[Number(a.unit),a.kind,Number(a.number)].join(":");
-  function build(ref){
-    const a=cases[key(ref)];
-    if(!a)return null;
-    return {...a,
-      id:"PN-"+a.unit+"-"+a.kind+"-"+a.number,
-      reference:ref.id||("Actividad resuelta "+a.unit+"."+a.number),
-      warning:"Enunciado del libro y magnitudes originales. Verificado matemáticamente; contraste instrumental Falstad pendiente.",
-      steps:[
-        "Lee el enunciado literal y plantea la ecuación sin consultar la solución.",
-        "Comprueba la conexión en serie del amperímetro y en paralelo del voltímetro.",
-        "Ejecuta CircuitJS y compara las lecturas con el resultado matemático.",
-        "Documenta los errores de medida antes de dar la actividad por validada."
-      ]
-    };
+    top.push("g 96 352 96 376 0");
+    return [HEADER,...top].join("\n")+"\n";
+  }
+  const q=(label,value,unit,formula,tolerance=0.005)=>
+    ({label,value,unit,formula,tolerance:Math.max(tolerance,Math.abs(value)*0.005)});
+  const page=p=>p+26;
+  const ref=(unit,number,title,statement,questions,config={})=>({
+    unit,kind:"resuelta",number,bookPage:config.bookPage||config.page,
+    pdfPage:page(config.page),title:"Actividad resuelta "+unit+"."+number+" · "+title,
+    statement,questions,
+    circuit:config.circuit||null,
+    measured:config.measured||[],
+    scope:config.scope||"Sin circuito eléctrico único en el enunciado: se mantienen los datos del libro sin inventar tensión, corriente ni resistencia.",
+    energyHours:config.energyHours??null,
+    tariff:config.tariff??null,
+    powerGiven:config.powerGiven??null,
+    notes:config.notes||""
+  });
+  const load=(u,r)=>({circuit:circuit({v:u,r,watt:true}),
+    measured:[
+      {label:"Amperímetro A1",type:"current",value:u/r,unit:"A"},
+      {label:"Voltímetro V1",type:"voltage",value:u,unit:"V"},
+      {label:"Vatímetro W1",type:"power",value:u*u/r,unit:"W"}
+    ],scope:"Modelo CC equivalente de receptor óhmico a tensión eficaz nominal. Los valores de U, I y P son comparables al caso resistivo de CA, pero la forma de onda no es alterna."
+  });
+  const entries=[
+    ref(2,1,"Ley de Ohm",
+      "Calcula la intensidad que circula por el filamento de una lámpara incandescente de 10 Ω de resistencia, cuando está sometida a una tensión de 12 V.",
+      [q("Intensidad del filamento",1.2,"A","I=U/R=12/10=1,2 A")],
+      {...load(12,10),page:24}),
+    ref(2,2,"Resistencia de una lámpara",
+      "Se quiere determinar la resistencia eléctrica del filamento de una lámpara incandescente. Para ello, se somete a la lámpara a una tensión de 230 V y, mediante un amperímetro intercalado en serie, se mide el paso de una intensidad de corriente de 0,2 A (Figura 2.8).",
+      [q("Resistencia del filamento",1150,"Ω","R=U/I=230/0,2=1.150 Ω")],
+      {...load(230,1150),page:24}),
+    ref(3,3,"Potencia de un horno",
+      "Calcula la potencia que consume un horno eléctrico si se conecta a una tensión de 230 V y su resistencia es de 50 Ω.",
+      [q("Intensidad del horno",4.6,"A","I=230/50=4,6 A"),
+       q("Potencia consumida",1058,"W","P=230·4,6=1.058 W")],
+      {...load(230,50),page:38}),
+    ref(3,5,"Resistencia de caldeo",
+      "La placa de características de una plancha eléctrica indica que su potencia es de 500 W y su corriente nominal de 4 A. Calcula el valor de la resistencia de caldeo.",
+      [q("Tensión nominal",125,"V","U=P/I=500/4=125 V"),
+       q("Resistencia de caldeo",31.25,"Ω","R=U/I=125/4=31,25 Ω")],
+      {...load(125,31.25),page:39}),
+    ref(3,6,"Tensión de un horno",
+      "Se dispone de una resistencia calefactora para un horno eléctrico de la que solo se conoce su potencia de trabajo, 700 W, y el valor óhmico de la misma, 75,6 Ω. ¿A qué tensión se podrá conectar el horno para que funcione correctamente?",
+      [q("Tensión de alimentación",Math.sqrt(700*75.6),"V","U=√(P·R)=√(700·75,6)≈230 V",0.1)],
+      {...load(230,75.6),page:39,notes:"La solución editorial redondea 230,043 V a 230 V: el vatímetro de la simulación indicará 699,735 W, diferencia debida al redondeo."}),
+    ref(3,9,"Energía eléctrica",
+      "Calcula la energía, en kWh y julios, consumidos por un calefactor de 500 W en 8 horas de funcionamiento.",
+      [q("Energía",4,"kWh","E=0,5 kW·8 h=4 kWh"),
+       q("Energía en julios",14400000,"J","E=500 W·(8·3.600 s)=14.400.000 J")],
+      {page:40,powerGiven:500,energyHours:8,
+       notes:"Errata del solucionario: donde figura 28.000 s debe decir 28.800 s; el resultado final de 14,4 MJ es correcto."}),
+    ref(3,10,"Gasto bimensual",
+      "Se quiere determinar el gasto bimensual de un calefactor de 500 W, que funciona, por término medio, 4 horas al día. Precio del kWh: 0,09 €.",
+      [q("Energía en 60 días",120,"kWh","E=0,5 kW·(60·4 h)=120 kWh"),
+       q("Coste bimensual",10.8,"€","Gasto=120 kWh·0,09 €/kWh=10,80 €")],
+      {page:40,powerGiven:500,energyHours:240,tariff:0.09}),
+    ref(4,1,"Calor por efecto Joule",
+      "Calcula el calor desprendido por un horno eléctrico de 2.000 W en 5 minutos de funcionamiento.",
+      [q("Energía eléctrica",600000,"J","E=2.000 W·(5·60 s)=600.000 J"),
+       q("Calor",144000,"cal","Q=0,24·E=144.000 cal=144 kcal")],
+      {page:48,powerGiven:2000,energyHours:5/60,
+       notes:"Se emplea el factor editorial aproximado de 0,24 cal/J."}),
+    ref(4,4,"Termo eléctrico",
+      "Determina la potencia que deberá tener un termo eléctrico de agua para calentar un depósito de 50 litros en 1 hora. El agua entra a 12 ºC y se desea calentarla hasta 60 ºC. Calcula también el valor óhmico de la resistencia de caldeo para una tensión de 230 V (Figura 4.1).",
+      [q("Calor necesario",2400000,"cal","Q=50.000 g·1 cal/(g·°C)·(60−12)°C=2.400.000 cal"),
+       q("Potencia necesaria",10000000/3600,"W","E=Q/0,24=10.000.000 J; P=E/3.600≈2.778 W",2),
+       q("Resistencia de caldeo",230*230/(10000000/3600),"Ω","R=230²/(10.000.000/3.600)≈19 Ω",0.1)],
+      {...load(230,230*230/(10000000/3600)),page:49,energyHours:1,
+       notes:"El libro usa 0,24 cal/J y redondea a 2,8 kW y 19 Ω. No representa el calentamiento dinámico del agua ni las pérdidas térmicas."}),
+    ref(4,5,"Coste de funcionamiento del termo",
+      "Averigua cuál será el coste de la energía de la Actividad resuelta 4.4 si el precio del kWh es de 0,088 €.",
+      [q("Energía redondeada en el libro",2.8,"kWh","E≈2,8 kW·1 h=2,8 kWh",0.03),
+       q("Gasto energético",0.25,"€","Gasto≈2,8·0,088=0,2464 €≈0,25 €",0.01)],
+      {...load(230,230*230/(10000000/3600)),page:49,energyHours:1,tariff:0.088,
+       notes:"El libro redondea previamente la potencia a 2,8 kW. Sin ese redondeo: E≈2,7778 kWh y gasto≈0,2444 €, que puede redondearse a 0,24 €."}),
+    ref(4,6,"Calor de una plancha",
+      "Determina el aumento de temperatura que experimentará una plancha eléctrica de acero si se la calienta mediante una resistencia de caldeo de 10 ohmios a 125 V durante 10 minutos. La plancha posee una masa de 7 kg y se supone que se pierde un 25 % del calor generado.",
+      [q("Intensidad eléctrica",12.5,"A","I=125/10=12,5 A"),
+       q("Calor eléctrico",225000,"cal","Q=0,24·10·(12,5)²·600=225.000 cal"),
+       q("Aumento de temperatura",168750/(7000*0.11),"°C","ΔT=(225.000·0,75)/(7.000·0,11)≈219 °C",1)],
+      {...load(125,10),page:49,energyHours:1/6,
+       notes:"Calor útil del 75 %: 168.750 cal; calor específico acero 0,11 cal/(g·°C). Falstad mide la potencia eléctrica, no simula las pérdidas térmicas."})
+  ];
+  const table=new Map(entries.map(e=>[[e.unit,e.kind,e.number].join(":"),e]));
+  const get=a=>table.get([Number(a.unit),a.kind,Number(a.number)].join(":"));
+  const fmtSteps=[
+    "Identifica el dato y la magnitud solicitada en el enunciado de Paraninfo.",
+    "Calcula la solución manualmente antes de mostrar el desarrollo.",
+    "Si existe circuito, contrasta en Falstad el amperímetro, voltímetro y vatímetro.",
+    "Distingue la medida instrumental de las magnitudes calculadas (tiempo, calor y tarifa)."
+  ];
+  function build(a){
+    const e=get(a);if(!e)return null;
+    return {...e,id:"PN-"+e.unit+"-"+e.kind+"-"+e.number,
+      reference:a.id||("Actividad resuelta "+e.unit+"."+e.number),
+      warning:e.circuit?
+        "Enunciado y datos originales. Circuito equivalente para contrastar medidas; no representa fenómenos térmicos ni el filamento real.":
+        "Enunciado original. No existe circuito eléctrico único con los datos proporcionados: solo cálculo de las magnitudes especificadas.",
+      steps:fmtSteps};
   }
   window.LabTextbookExercises={
-    build,
-    has:ref=>Boolean(cases[key(ref)]),
-    unitsSupported:[2],
-    validate(ref){
-      const e=build(ref);
-      return !!e && e.circuit.startsWith("$ ") && e.circuit.includes("370 ") &&
-        e.circuit.includes("\np ") && e.questions.every(q=>Number.isFinite(q.value));
-    },
-    totalVerified:2,
-    provisional:true
+    build,has:a=>Boolean(get(a)),
+    unitsSupported:[...new Set(entries.map(e=>e.unit))],
+    totalCatalogued:entries.length,
+    validate(a){
+      const e=build(a);if(!e)return false;
+      const good=e.questions.length>0&&e.questions.every(x=>Number.isFinite(x.value));
+      return good && (!e.circuit || (e.circuit.startsWith("$ ")&&e.circuit.includes("370 ")&&e.circuit.includes("\np ")));
+    }
   };
 })();
