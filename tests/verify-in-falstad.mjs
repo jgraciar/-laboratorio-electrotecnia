@@ -20,11 +20,29 @@ try {
       return {id:x.id,expected:x.measured,load:result};
     },ref);
     assert(meta.load?.ok,meta.id+": CircuitJS rechazó la importación: "+JSON.stringify(meta.load));
-    await page.waitForFunction(id=>{
-      const r=window.LabCircuit.getInstrumentReadings();
-      return r?.id===id && r.time>=0.03 && Number.isFinite(r.current) &&
-        Number.isFinite(r.voltage);
-    },meta.id,{timeout:30000});
+    try{
+      await page.waitForFunction(id=>{
+        const r=window.LabCircuit.getInstrumentReadings();
+        return r?.id===id && r.time>=0.03 && Number.isFinite(r.current) &&
+          Number.isFinite(r.voltage);
+      },meta.id,{timeout:8000});
+    }catch(err){
+      const diagnostic=await page.evaluate(()=>{
+        const frame=document.getElementById("circuit-frame");
+        const sim=frame?.contentWindow?.CircuitJS1;
+        let state={status:document.getElementById("bridge-status")?.textContent,
+          frameSrc:frame?.src,readings:window.LabCircuit.getInstrumentReadings()};
+        try{
+          state.time=sim?.getTime();
+          state.elements=Array.from(sim?.getElements()||[]).map(el=>({
+            type:el.getType(),current:el.getCurrent?.(),voltage:el.getVoltageDiff?.()
+          })).slice(0,18);
+        }catch(x){state.problem=String(x);}
+        return state;
+      });
+      console.error("DIAGNÓSTICO DE CIRCUITJS",JSON.stringify(diagnostic));
+      throw err;
+    }
     const readings=await page.evaluate(()=>window.LabCircuit.getInstrumentReadings());
     for(const measure of meta.expected){
       const actual=readings[measure.type];
