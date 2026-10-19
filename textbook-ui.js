@@ -90,14 +90,14 @@
     root.append(create("h4","practice-subtitle","Modelo equivalente de Falstad"));
     root.append(create("p","",x.scope));
     const actions=create("div","practice-actions");
-    const status=create("p","hint","Pulsa «Cargar circuito Falstad» y espera a que esté listo.");
+    const status=create("p","hint","Preparando circuito Falstad integrado…");
     function load(){
       const result=window.LabCircuit?.loadExerciseCircuit?.(x.id,x.circuit);
       status.textContent=result?.ok?
         "Modelo "+x.id+" cargado. Modifica sus componentes y mide tensión y corriente.":
         (result?.message||"CircuitJS no está conectado todavía.");
     }
-    actions.append(button("Cargar circuito Falstad",load));
+    actions.append(button("Reiniciar circuito Falstad",load));
     actions.append(button("Descargar informe TXT",report));
     actions.append(button("Cerrar ejercicio",close));
     root.append(actions,status);
@@ -130,6 +130,7 @@
     root.append(controls,score,solutions);
     window.LabPublicationCircuitOpen=true;
     window.LabScope?.setMode("publications");
+    load();
     root.scrollIntoView?.({behavior:"smooth",block:"start"});
     return true;
   }
