@@ -130,3 +130,12 @@ footer a{color:#92ccff}
 .publication-numbered-item .toolbtn{margin-top:auto}
 .publication-linked{display:flex;gap:9px;flex-wrap:wrap}
 @media(max-width:750px){.publication-filters{grid-template-columns:1fr}.publication-numbered{grid-template-columns:1fr}.publication-activity{align-items:flex-start;flex-direction:column}.publication-activity span{white-space:normal}}
+
+/* Buscador del catálogo Paraninfo 2022 */
+.publication-filters{grid-template-columns:repeat(2,minmax(210px,1fr))}
+.publication-activity-count{font-size:13px;color:#a8cdee;margin:0 0 14px}
+.publication-numbered-item{min-height:115px}
+.publication-numbered-item strong{line-height:1.4}
+.publication-numbered-item small{margin-top:auto}
+#publicationActivityResults>.toolbtn{display:block;margin:16px auto 5px}
+@media(max-width:750px){.publication-filters{grid-template-columns:1fr}}
