@@ -6,6 +6,8 @@ const page=await browser.newPage({viewport:{width:1440,height:1000}});
 page.on("pageerror",err=>console.error("BROWSER:",err.message));
 try {
   await page.goto("http://127.0.0.1:8765/",{waitUntil:"domcontentloaded"});
+  // El iframe CircuitJS se carga de forma diferida y está oculto en la vista inicial.
+  await page.locator('button[data-mode="falstad"]').click();
   await page.waitForFunction(()=>window.LabCircuit?.isIntegrated?.(),null,{timeout:180000});
   await page.waitForFunction(()=>document.querySelector("#circuit-frame")?.contentWindow?.CircuitJS1,null,{timeout:180000});
   for(const ref of [
