@@ -65,7 +65,7 @@
   }
   function sampleSet() {
 
-    if (mode === "falstad" || mode === "practices") {
+    if (mode === "falstad" || mode === "practices" || (mode==="publications" && window.LabPublicationCircuitOpen)) {
       const windowSec = clamp(finite(num("sampleWindow"),100),1,10000)/1000;
       if(externalRecords.length<2) {
         showMetrics([["Estado","Sin muestras"],["Ventana",fmt(windowSec*1000)+" ms"]]);
@@ -229,7 +229,7 @@
       ctx.fillText("H"+(i+1),left+slot*(i+.5),top+plotH+14);
     });
     ctx.textAlign="left";
-    $("spectrumInfo").textContent=(mode==="falstad" || mode==="practices")?
+    $("spectrumInfo").textContent=(mode==="falstad" || mode==="practices" || (mode==="publications" && window.LabPublicationCircuitOpen))?
       "Espectro por armónicos de la ventana: la frecuencia fundamental real no está verificada; no se presenta THD.":
       "Fundamental: "+fmt(frequency)+" Hz · H1 (pico): "+fmt(fundamental,5)+" · THD aproximada (H2–H15): "+fmt(thd,3)+" %";
   }
@@ -312,7 +312,7 @@
       bar.style.background=t.color;
       span.append(bar,document.createTextNode(t.name));return span;
     }));
-    $("scope-subtitle").textContent=(mode==="falstad" || mode==="practices")?
+    $("scope-subtitle").textContent=(mode==="falstad" || mode==="practices" || (mode==="publications" && window.LabPublicationCircuitOpen))?
       "Señal de CircuitJS · ventana "+fmt(2000/frequency)+" ms · valores simulados":
       "Dos periodos · "+fmt(frequency)+" Hz · "+(mode==="threephase"?"red equilibrada":"funciones virtuales");
   }
@@ -326,10 +326,10 @@
     $("generator-controls").hidden=mode!=="generator";
     $("threephase-controls").hidden=mode!=="threephase";
     const practiceNeedsCircuit=window.LabPracticeHasCircuit!==false;
-    $("falstad-controls").hidden=mode!=="falstad" && !(mode==="practices" && practiceNeedsCircuit);
+    $("falstad-controls").hidden=mode!=="falstad" && !(mode==="practices" && practiceNeedsCircuit) && !(mode==="publications" && window.LabPublicationCircuitOpen);
     $("practices-controls").hidden=mode!=="practices";
     $("publications-controls").hidden=mode!=="publications";
-    $("scope-panel").hidden=mode==="publications" || (mode==="practices" && !practiceNeedsCircuit);
+    $("scope-panel").hidden=(mode==="publications" && !window.LabPublicationCircuitOpen) || (mode==="practices" && !practiceNeedsCircuit);
     $("trace-mode-label").hidden=mode!=="threephase";
 
     draw();
@@ -380,7 +380,7 @@
   window.LabScope={
     setCircuitRecords(records){
       externalRecords=Array.isArray(records)?records.slice(-5000):[];
-      if(mode==="falstad" || mode==="practices")draw();
+      if(mode==="falstad" || mode==="practices" || (mode==="publications" && window.LabPublicationCircuitOpen))draw();
     },
     clearCircuit(){
       externalRecords=[];if(mode==="falstad")draw();
