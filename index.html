@@ -16,6 +16,8 @@
   <script src="practices.js" defer></script>
   <script src="publications-data.js" defer></script>
   <script src="paraninfo-activities.js" defer></script>
+  <script src="textbook-exercises.js" defer></script>
+  <script src="textbook-ui.js" defer></script>
   <script src="publications.js" defer></script>
 </head>
 <body>
@@ -26,7 +28,7 @@
       <h1>Laboratorio virtual</h1>
       <p class="subtitle">Osciloscopio, generador de funciones y redes trifásicas. Todo desde tu navegador.</p>
     </div>
-    <div class="pill">Versión 0.9 · Catálogo Paraninfo completo</div>
+    <div class="pill">Versión 1.0 · Ejercicios y CircuitJS</div>
   </div>
 </header>
 <main class="layout">
@@ -91,6 +93,7 @@
       </label>
     </div>
     <div id="publicationContent" aria-live="polite"></div>
+    <section id="textbookExercisePanel" class="textbook-exercise-panel" hidden aria-live="polite"></section>
     <p class="hint">Las referencias corresponden a las páginas impresas de la edición indicada. Los títulos de actividades se identifican sin reproducir los enunciados, gráficos, soluciones ni contenido protegido del libro.</p>
   </section>
   <section class="panel" id="practices-controls" hidden>
