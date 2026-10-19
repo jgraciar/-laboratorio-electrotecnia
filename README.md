@@ -4,7 +4,7 @@ Aplicación web docente para FP. Combina un generador de funciones, un oscilosco
 
 **Web publicada desde el repositorio:** https://jgraciar.github.io/-laboratorio-electrotecnia/
 
-**Versión 0.8 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
+**Versión 0.9 (desarrollo)**. Las funciones ya añadidas a la rama main pueden tardar unos minutos en aparecer en la web.
 
 ## Funciones implementadas
 
@@ -66,22 +66,28 @@ La correspondencia es **parcial**: no se presupone que una simulación certifiqu
 
 ## Publicaciones y actividades del libro de texto
 
-La versión 0.8 añade la pestaña **Publicaciones**, preparada para incorporar varias editoriales y manuales, comenzando por la primera obra identificada y contrastada:
+La versión 0.9 completa el **catálogo de referencias numeradas de las 21 unidades** del siguiente manual que el docente aportó a su Biblioteca:
 
 - **Título:** *Electrotecnia*.
 - **Autor:** Pablo Alcalde San Miguel.
 - **Editorial:** Ediciones Paraninfo.
-- **Edición:** séptima, 2022.
+- **Edición:** 7.ª, 2022.
 - **ISBN:** 978-84-1366-155-1.
-- **Enseñanza:** GM · Instalaciones Eléctricas y Automáticas, módulo 0234 Electrotecnia.
+- **Módulo:** GM, Electrotecnia 0234 (Instalaciones Eléctricas y Automáticas).
 
-Se ha consultado el ejemplar original que el docente tenía en su biblioteca. El catálogo incluye las **21 unidades didácticas**, la localización de **67 secciones de actividades** comprobadas en el índice, sus páginas impresas y su correspondencia de página dentro del PDF del docente (26 páginas de diferencia para esta edición). La unidad 9 figura con secciones pendientes de verificar porque su índice presenta un problema de extracción, sin inventar números de página.
+**Referencias bibliográficas individualizadas: 571**, distribuidas en 71 prácticas de laboratorio, 330 actividades de comprobación, 98 evaluaciones resueltas, 36 propuestas, 28 de ampliación y 8 experimentales.
 
-La **primera extracción individual de actividades**, realizada en las unidades 1, 2 y 3, identifica diez referencias contrastadas: *Prácticas 1.1 y 1.2* (p. 18), *Prácticas 2.1, 2.2 y 2.3* (p. 33), *Actividades propuestas 2.1* (p. 25), *2.2* (p. 27) y *2.3* (p. 29), y *Prácticas 3.1 y 3.2* (p. 43). Cada una se etiqueta por su tema y, si existe una práctica afín del laboratorio, muestra un botón para abrirla directamente. Las actividades del libro y las prácticas propias del laboratorio se distinguen expresamente, sin presentar una como reproducción de la otra.
+El catálogo permite:
 
-La selección de unidades en la web se puede ampliar gradualmente hasta la identificación individual del resto de actividades; el índice no implica que todas las actividades hayan sido ya trasladadas o corregidas automáticamente.
+1. Seleccionar cualquiera de las 21 unidades.
+2. Mostrar las secciones del índice editorial y sus páginas impresas.
+3. Filtrar por clase de actividad y localizar por número o tema.
+4. Consultar la página del libro y la equivalente en el PDF concreto del docente.
+5. Abrir, cuando existe y está justificada, una práctica de Falstad relacionada con los contenidos.
 
-**Derechos de autor:** la web publica referencias bibliográficas, unidades, secciones, localizadores de página y ejercicios propios. **No aloja ni distribuye el PDF, las ilustraciones, las soluciones ni el texto completo de los ejercicios protegidos del manual.** El acceso al libro requiere el ejemplar legítimo del usuario.
+La información se obtuvo mediante análisis de las páginas del ejemplar. Se corrigieron desajustes de reconocimiento de texto en varias referencias y se incorporaron las secciones de la Unidad 9. La base está en \`paraninfo-activities.js\` (inventario compacto de páginas y numeración), \`publications-data.js\` (edición y unidades), y \`publications.js\` (interfaz).
+
+**Alcance:** el catálogo identifica números, tipos, temas y páginas de los ejercicios; no equivale a reproducir o resolver las 571 actividades del libro. La vinculación individual con Falstad solo aparece cuando hay una práctica apropiada. Las 24 prácticas propias del laboratorio siguen disponibles independientemente. La bibliografía no contiene enunciados, gráficos, el libro PDF ni su solucionario, sujetos a derechos de autor.
 
 ## Seis módulos con denominación oficial y nivel
 
