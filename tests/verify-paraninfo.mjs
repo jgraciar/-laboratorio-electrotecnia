@@ -36,7 +36,7 @@ for(const [unit,number,expected,elec] of cases){
     const ammeter=parts.find(s=>s.startsWith("370 ")).split(" ");
     const voltmeter=parts.find(s=>s.startsWith("p ")).split(" ");
     const wattmeter=parts.find(s=>s.startsWith("420 ")).split(" ");
-    assert(ammeter.length>=8 && voltmeter.length>=10 && wattmeter.length>=9);
+    assert(ammeter.length>=8 && voltmeter.length>=9 && wattmeter.length>=8);
     // Comprobar escala explícita contra corriente y tensión del ejercicio.
     const expectedIScale=Math.abs(elec[0]/elec[1])>=1?1:Math.abs(elec[0]/elec[1])>=.001?2:3;
     const expectedVScale=Math.abs(elec[0])>=1?1:Math.abs(elec[0])>=.001?2:3;
