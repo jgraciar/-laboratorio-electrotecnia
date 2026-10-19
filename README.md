@@ -207,3 +207,27 @@ Puedes servir la raíz del repositorio con un servidor HTTP estático (por ejemp
 ## Próximos hitos
 
 Validar en navegador los seis nuevos montajes SCE y sus cálculos guiados; completar prácticas sobre máquinas rotativas, transformadores trifásicos y medida real de parámetros; vincular evidencias de evaluación con los RA/CE y la programación docente; incorporar sistemas trifásicos desequilibrados y fallos de neutro.
+
+
+## Actividades literales de Paraninfo · incorporación progresiva (octubre 2026)
+
+La pestaña «Publicaciones» presenta **solo actividades originales transcritas del libro
+que ha facilitado el docente**, con referencia a unidad, número y página. Se han retirado
+del apartado las 755 variantes genéricas parametrizadas (el antiguo generador ya no se
+usa). En esta fase hay **11 actividades reales** de las unidades 2, 3 y 4:
+AR 2.1, 2.2; 3.3, 3.5, 3.6, 3.9, 3.10; 4.1, 4.4, 4.5 y 4.6.
+
+Ocho incorporan un circuito resistivo equivalente con amperímetro, voltímetro
+y vatímetro nativos de Falstad. El circuito representa tensión e intensidad nominales,
+no necesariamente la forma de onda CA ni la física térmica del receptor. Las tres
+actividades que proporcionan solo potencia y tiempo no determinan un circuito único,
+por lo que no se les inventa una tensión. El contador y tarificador virtuales
+distinguen extrapolación de potencia al tiempo del enunciado de energía simulada real.
+El resultado editorial 4.5 emplea redondeo intermedio; se explica su diferencia.
+El solucionario de la AR 3.9 tiene una errata: 8 h son 28.800 s, no 28.000 s.
+
+`tests/verify-paraninfo.mjs` comprueba la matemática y estructura de todas las fichas;
+`tests/verify-in-falstad.mjs` comprueba los instrumentos del CircuitJS real.
+Los resultados nuevos se marcarán como comprobados únicamente si GitHub Actions
+confirma esa segunda verificación. No se incorporan actividades sin cotejar su
+enunciado y solución original.

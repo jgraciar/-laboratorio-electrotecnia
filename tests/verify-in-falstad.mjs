@@ -12,10 +12,8 @@ try {
   await page.waitForFunction(()=>document.querySelector("#circuit-frame")?.contentWindow?.CircuitJS1,null,{timeout:180000});
   // La instancia JS puede existir antes de que termine la carga del circuito inicial.
   await page.waitForFunction(()=>{const s=document.querySelector("#circuit-frame")?.contentWindow?.CircuitJS1;return s?.getTime?.()>0.02;},null,{timeout:45000});
-  for(const ref of [
-    {unit:2,kind:"resuelta",number:1},
-    {unit:2,kind:"resuelta",number:2}
-  ]){
+  for(const [unit,number] of [[2,1],[2,2],[3,3],[3,5],[3,6],[4,4],[4,5],[4,6]]){
+    const ref={unit,kind:"resuelta",number};
     const meta=await page.evaluate(ref=>{
       const x=window.LabTextbookExercises.build(ref);
       const result=window.LabCircuit.loadExerciseCircuit(x.id,x.circuit);
@@ -26,7 +24,7 @@ try {
       await page.waitForFunction(id=>{
         const r=window.LabCircuit.getInstrumentReadings();
         return r?.id===id && r.time>=0.03 && Number.isFinite(r.current) &&
-          Number.isFinite(r.voltage);
+          Number.isFinite(r.voltage) && Number.isFinite(r.power);
       },meta.id,{timeout:8000});
     }catch(err){
       const diagnostic=await page.evaluate(()=>{
@@ -55,5 +53,5 @@ try {
       console.log(meta.id,measure.label,"teoría",measure.value,"medido",actual);
     }
   }
-  console.log("DOS ACTIVIDADES CONTRASTADAS CON MOTOR REAL CIRCUITJS");
+  console.log("OCHO ACTIVIDADES CONTRASTADAS CON MOTOR REAL CIRCUITJS");
 }finally{await browser.close();}

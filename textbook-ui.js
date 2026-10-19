@@ -33,6 +33,8 @@
       "Referencia bibliográfica: "+x.reference+" · página impresa "+x.bookPage,
       "Unidad "+x.unit+" · "+x.title,
       "ENUNCIADO ORIGINAL: "+x.statement,
+      "PRECISIONES: "+(x.notes||"Sin observaciones adicionales"),
+      "CIRCUITO: "+(x.circuit?"Modelo equivalente para contrastar en Falstad.":"No existe un circuito único con los datos facilitados."),
       "",
       "ADVERTENCIA",
       x.warning,
@@ -94,6 +96,7 @@
     root.append(create("h4","practice-subtitle","Enunciado original del libro"));
     root.append(create("p","practice-statement",x.statement));
     root.append(create("p","practice-note",x.warning));
+    if(x.notes)root.append(create("p","practice-note",x.notes));
     const relation=window.LabTextbookCurriculum?.[x.unit];
     if(relation) {
       const line=create("p","practice-curriculum",
@@ -108,16 +111,41 @@
     root.append(create("h4","practice-subtitle","Circuito para verificar el enunciado en Falstad"));
     root.append(create("p","",x.scope));
     const actions=create("div","practice-actions");
-    const status=create("p","hint","Preparando circuito Falstad integrado…");
+    const status=create("p","hint",x.circuit?
+      "Preparando circuito Falstad integrado…":
+      "Sin circuito: los datos del libro no determinan un montaje eléctrico único.");
     function load(){
+      if(!x.circuit){
+        status.textContent="No se crea un circuito con tensiones o impedancias inventadas.";
+        return;
+      }
       const result=window.LabCircuit?.loadExerciseCircuit?.(x.id,x.circuit);
       status.textContent=result?.ok?
         "Modelo "+x.id+" cargado. Modifica sus componentes y mide tensión y corriente.":
         (result?.message||"CircuitJS no está conectado todavía.");
     }
-    actions.append(button("Reiniciar circuito Falstad",load));
+    if(x.circuit)actions.append(button("Reiniciar circuito Falstad",load));
     const meterResult=create("p","practice-summary","Sin comparación instrumental de Falstad.");
     const meterDetails=create("div","practice-meter-details");
+    const energyPanel=create("div","practice-energy-panel");
+    function showEnergy(power){
+      if(x.energyHours==null||!Number.isFinite(power))return;
+      const energy=power*x.energyHours/1000;
+      energyPanel.replaceChildren();
+      energyPanel.append(create("h4","practice-subtitle","Contador virtual de energía"));
+      energyPanel.append(create("p","",
+        "Potencia "+fmt(power)+" W · tiempo del enunciado "+fmt(x.energyHours)+
+        " h · energía "+fmt(energy)+" kWh ("+fmt(energy*3600000)+" J)."));
+      if(x.tariff!=null){
+        energyPanel.append(create("p","",
+          "Tarificador: "+fmt(x.tariff)+" €/kWh × "+fmt(energy)+
+          " kWh = "+fmt(energy*x.tariff)+" €. Se aplica la tarifa fija indicada en el libro."));
+      }
+      energyPanel.append(create("p","hint",
+        x.circuit?"El contador extrapola la potencia medida en Falstad al tiempo indicado en el enunciado; no acelera ni falsifica el tiempo de la simulación.":
+        "El contador usa exclusivamente la potencia y duración que proporciona el enunciado; no es una lectura de Falstad."));
+    }
+    if(Number.isFinite(x.powerGiven))showEnergy(x.powerGiven);
     function compareMeters(){
       const reading=window.LabCircuit?.getInstrumentReadings?.();
       if(!reading || reading.id!==x.id){
@@ -126,7 +154,8 @@
       meterDetails.replaceChildren();
       let pass=reading.time>=0.002,compared=0;
       for(const m of x.measured||[]){
-        const actual=m.type==="current"?reading.current:reading.voltage;
+        const actual=m.type==="current"?reading.current:
+          m.type==="power"?reading.power:reading.voltage;
         if(!Number.isFinite(actual)){pass=false;continue;}
         const diff=Math.abs(actual-m.value);
         const tolerance=Math.max(0.0001,Math.abs(m.value)*0.005);
@@ -141,11 +170,14 @@
       meterResult.textContent=compared===(x.measured||[]).length && pass?
         "Contraste instrumental satisfactorio para esta ejecución (tolerancia 0,5 %; t ≥ 2 ms).":
         "Resultado pendiente: revisa conexión, estabilización y lecturas en Falstad.";
+      if(Number.isFinite(reading.power)&&x.energyHours!=null)showEnergy(reading.power);
     }
-    actions.append(button("Comparar lecturas reales de Falstad",compareMeters));
+    if(x.circuit)actions.append(button("Comparar lecturas reales de Falstad",compareMeters));
     actions.append(button("Descargar informe TXT",report));
     actions.append(button("Cerrar ejercicio",close));
-    root.append(actions,status,meterResult,meterDetails);
+    root.append(actions,status);
+    if(x.circuit)root.append(meterResult,meterDetails);
+    if(x.energyHours!=null)root.append(energyPanel);
     root.append(create("h4","practice-subtitle","Procedimiento"));
     const steps=create("ol","practice-steps");
     x.steps.forEach(step=>steps.append(create("li","",step)));
@@ -173,9 +205,9 @@
     controls.append(button("Comprobar respuestas",verify),reveal);
     const score=create("p","practice-summary");score.id="textbookScore";
     root.append(controls,score,solutions);
-    window.LabPublicationCircuitOpen=true;
+    window.LabPublicationCircuitOpen=Boolean(x.circuit);
     window.LabScope?.setMode("publications");
-    load();
+    if(x.circuit)load();
     root.scrollIntoView?.({behavior:"smooth",block:"start"});
     return true;
   }

@@ -1,0 +1,59 @@
+name: Verificar actividades originales Paraninfo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Código de la web
+        uses: actions/checkout@v4
+        with:
+          path: lab
+      - name: Fuente de CircuitJS fijada en el proyecto
+        uses: actions/checkout@v4
+        with:
+          repository: pfalstad/circuitjs1
+          ref: 5a707168778216bb6ed01bfdd62e8bbf7ae0a032
+          path: circuitjs-src
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Comprobar sintaxis y resultados independientes
+        run: |
+          for file in lab/app.js lab/bridge.js lab/textbook-exercises.js lab/textbook-ui.js lab/publications.js; do node --check "$file"; done
+          node lab/tests/verify-paraninfo.mjs
+      - name: Java para GWT
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "8"
+      - name: Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Compilar CircuitJS real
+        working-directory: circuitjs-src
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon compileGwt makeSite --console plain
+      - name: Montar web de prueba
+        run: |
+          mkdir -p public/circuitjs
+          cp lab/*.html lab/*.css lab/*.js public/
+          cp -a circuitjs-src/site/. public/circuitjs/
+      - name: Instalar navegador de pruebas
+        working-directory: lab
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Contrastar amperímetro y voltímetro con CircuitJS
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory public >/tmp/paraninfo-server.log 2>&1 &
+          node lab/tests/verify-in-falstad.mjs
