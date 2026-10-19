@@ -136,8 +136,20 @@
     message("Cargando "+filename+" en CircuitJS…");
     return {ok:true};
   }
+  function loadExerciseCircuit(id,dump){
+    if(!localAvailable)return {ok:false,message:"CircuitJS integrado no está disponible."};
+    if(!/^PN-\\d{1,2}-(?:resuelta|practica|comprobacion|evaluacion|propuesta|ampliacion|experimental)-\\d{1,3}$/.test(id)){
+      return {ok:false,message:"Identificador de ejercicio no válido."};
+    }
+    if(typeof dump!=="string" || dump.length>30000 || !dump.startsWith("$ ") ||
+       !dump.split("\\n").slice(1).every(line=>line==="" || /^(?:v|r|l|c|w|g|T|x) /.test(line))){
+      return {ok:false,message:"Formato de circuito no válido."};
+    }
+    return importModel(id,dump);
+  }
   window.LabCircuit={
     loadExample,
+    loadExerciseCircuit,
     isIntegrated:()=>localAvailable,
     currentExample:()=>selectedExample
   };
